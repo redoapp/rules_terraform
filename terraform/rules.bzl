@@ -123,7 +123,7 @@ def cdktf_project(name, cdktf, bin, config, visibility = None):
         visibility = visibility,
     )
 
-def _terraform_format(ctx, src, out, bin):
+def _tf_format(ctx, src, out, bin):
     ctx.actions.run_shell(
         command = '< "$2" "$1" fmt - > "$3"',
         arguments = [bin.path, src.path, out.path],
@@ -131,24 +131,24 @@ def _terraform_format(ctx, src, out, bin):
         outputs = [out],
     )
 
-def _terraform_format_impl(ctx):
+def _tf_format_impl(ctx):
     terraform = ctx.file._terraform
 
     def format(ctx, path, src, out):
-        _terraform_format(ctx, src, out, terraform)
+        _tf_format(ctx, src, out, terraform)
 
     format_info = FormatterInfo(fn = format)
 
     return [format_info]
 
-terraform_format = rule(
-    implementation = _terraform_format_impl,
+tf_format = rule(
+    implementation = _tf_format_impl,
     attrs = {
         "_terraform": attr.label(allow_single_file = True, default = "@terraform//:terraform"),
     },
 )
 
-def _terraform_project_impl(ctx):
+def _tf_project_impl(ctx):
     actions = ctx.actions
     data = ctx.files.data
     data_default = [target[DefaultInfo] for target in ctx.attr.data]
@@ -183,7 +183,7 @@ def _terraform_project_impl(ctx):
 
     return [default_info]
 
-terraform_project = rule(
+tf_project = rule(
     attrs = {
         "data": attr.label_list(
             allow_files = True,
@@ -199,10 +199,10 @@ terraform_project = rule(
         ),
     },
     executable = True,
-    implementation = _terraform_project_impl,
+    implementation = _tf_project_impl,
 )
 
-def _terraform_import_cdktf_data_impl(ctx):
+def _tf_import_cdktf_data_impl(ctx):
     actions = ctx.actions
     cdktf_terraform_data = ctx.executable._cdktf_terraform_data
     cdktf_terraform_data_default = ctx.attr._cdktf_terraform_data[DefaultInfo]
@@ -225,7 +225,7 @@ def _terraform_import_cdktf_data_impl(ctx):
 
     return [default_info]
 
-terraform_import_cdktf_data = rule(
+tf_import_cdktf_data = rule(
     attrs = {
         "lock": attr.label(
             allow_single_file = True,
@@ -244,11 +244,11 @@ terraform_import_cdktf_data = rule(
             executable = True,
         ),
     },
-    implementation = _terraform_import_cdktf_data_impl,
+    implementation = _tf_import_cdktf_data_impl,
 )
 
-def terraform_import_cdktf(name, lock, stack, synth, visibility = None):
-    terraform_import_cdktf_data(
+def tf_import_cdktf(name, lock, stack, synth, visibility = None):
+    tf_import_cdktf_data(
         name = ".cdktf/%s" % name,
         lock = lock,
         stack = stack,
@@ -256,14 +256,14 @@ def terraform_import_cdktf(name, lock, stack, synth, visibility = None):
         visibility = ["//visibility:private"],
     )
 
-    terraform_project(
+    tf_project(
         name = name,
         data = [":.cdktf/%s" % name],
         path = ".cdktf/%s" % name,
         visibility = visibility,
     )
 
-def _terraform_lock_impl(ctx):
+def _tf_lock_impl(ctx):
     actions = ctx.actions
     output = ctx.attr.output or "%s%s" % ("%s/" % ctx.label.package if ctx.label.package else "", ".terraform.lock.hcl")
     label = ctx.label
@@ -300,7 +300,7 @@ def _terraform_lock_impl(ctx):
 
     return [default_info]
 
-terraform_lock = rule(
+tf_lock = rule(
     attrs = {
         "output": attr.string(),
         "path": attr.string(
@@ -317,5 +317,5 @@ terraform_lock = rule(
         ),
     },
     executable = True,
-    implementation = _terraform_lock_impl,
+    implementation = _tf_lock_impl,
 )
