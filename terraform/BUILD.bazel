@@ -1,19 +1,22 @@
 load("//sh:rules.bzl", "sh_binary")
 
-package(default_visibility = ["//visibility:public"])
-
-exports_files([
-    "cdktf-project-runner.sh.tpl",
-    "terraform-lock-runner.sh.tpl",
-    "terraform-project-runner.sh.tpl",
-])
+exports_files(
+    [
+        "cdktf-project-runner.sh.tpl",
+        "terraform-lock-runner.sh.tpl",
+        "terraform-project-runner.sh.tpl",
+    ],
+    visibility = ["//visibility:public"],
+)
 
 sh_binary(
     name = "cdktf_synth",
     main = "cdktf-synth.sh",
+    visibility = ["//visibility:public"],
 )
 
 sh_binary(
     name = "cdktf_terraform_data",
     main = "cdktf-terraform-data.sh",
+    visibility = ["//visibility:public"],
 )

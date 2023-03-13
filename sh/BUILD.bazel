@@ -1,6 +1,5 @@
-package(default_visibility = ["//visibility:public"])
-
 filegroup(
     name = "runner",
     srcs = ["runner.sh.tpl"],
+    visibility = ["//visibility:public"],
 )

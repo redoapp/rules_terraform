@@ -1,7 +1,5 @@
 load("@rules_file//generate:rules.bzl", "format", "formatter_composite", "generate_test", "multi_generate")
 
-package(default_visibility = ["//visibility:public"])
-
 format(
     name = "buildifier_format",
     srcs = ["@files//:buildifier_files"],
@@ -11,6 +9,7 @@ format(
 
 multi_generate(
     name = "format",
+    visibility = ["//:__subpackages__"],
     deps = [
         ":buildifier_format",
         ":prettier_format",
@@ -20,6 +19,7 @@ multi_generate(
 generate_test(
     name = "format_test",
     generate = ":format",
+    visibility = ["//:__subpackages__"],
 )
 
 format(

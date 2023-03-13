@@ -20,4 +20,5 @@ js_library(
     name = "prettier_config",
     srcs = [".prettierrc.yml"],
     root = ":root",
+    visibility = ["//:__subpackages__"],
 )

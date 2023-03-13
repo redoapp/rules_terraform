@@ -123,6 +123,31 @@ def cdktf_project(name, cdktf, bin, config, visibility = None):
         visibility = visibility,
     )
 
+def _terraform_format(ctx, src, out, bin):
+    ctx.actions.run_shell(
+        command = '< "$2" "$1" fmt - > "$3"',
+        arguments = [bin.path, src.path, out.path],
+        inputs = [bin, src],
+        outputs = [out],
+    )
+
+def _terraform_format_impl(ctx):
+    terraform = ctx.file._terraform
+
+    def format(ctx, path, src, out):
+        _terraform_format(ctx, src, out, terraform)
+
+    format_info = FormatterInfo(fn = format)
+
+    return [format_info]
+
+terraform_format = rule(
+    implementation = _terraform_format_impl,
+    attrs = {
+        "_terraform": attr.label(allow_single_file = True, default = "@terraform//:terraform"),
+    },
+)
+
 def _terraform_project_impl(ctx):
     actions = ctx.actions
     data = ctx.files.data
