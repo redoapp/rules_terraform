@@ -7,8 +7,8 @@ alias(
 )
 
 alias(
-    name = "format",
-    actual = "//tools/lint:format",
+    name = "lint",
+    actual = "//tools/lint",
 )
 
 cjs_root(
