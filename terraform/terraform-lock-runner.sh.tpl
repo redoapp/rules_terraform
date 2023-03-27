@@ -20,7 +20,7 @@ tmp="$(mktemp -d)"
 cp -r "$RUNFILES_DIR" "$tmp"/tmp.runfiles
 chmod 755 "$tmp"/tmp.runfiles/%{path}
 
-RUNFILES_DIR="$tmp"/tmp.runfiles "$tmp"/tmp.runfiles/%{terraform} providers lock
+RUNFILES_DIR="$tmp"/tmp.runfiles "$tmp"/tmp.runfiles/%{terraform} providers lock %{args}
 
 chmod 664 "$tmp"/tmp.runfiles/%{path}/.terraform.lock.hcl
 mv "$tmp"/tmp.runfiles/%{path}/.terraform.lock.hcl "$BUILD_WORKING_DIRECTORY"/%{output}

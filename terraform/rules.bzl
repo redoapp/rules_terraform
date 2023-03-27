@@ -297,6 +297,7 @@ def _tf_lock_impl(ctx):
     label = ctx.label
     name = ctx.attr.name
     path = ctx.attr.path
+    platforms = ctx.attr.platforms
     runner = ctx.file._runner
     terraform = ctx.executable.terraform
     terraform_default = ctx.attr.terraform[DefaultInfo]
@@ -313,6 +314,7 @@ def _tf_lock_impl(ctx):
         is_executable = True,
         output = executable,
         substitutions = {
+            "%{args}": " ".join([shell.quote("-platform=%s" % platform) for platform in platforms]),
             "%{output}": shell.quote(output),
             "%{path}": shell.quote(path),
             "%{terraform}": shell.quote(runfile_path(workspace, terraform)),
@@ -334,6 +336,7 @@ tf_lock = rule(
         "path": attr.string(
             mandatory = True,
         ),
+        "platforms": attr.string_list(),
         "terraform": attr.label(
             cfg = "target",
             executable = True,
