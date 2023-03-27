@@ -1,5 +1,17 @@
 load("//sh:rules.bzl", "sh_binary")
 
+alias(
+    name = "terraform",
+    actual = "//terraform/default:terraform",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "cdktf",
+    actual = "//terraform/default:cdktf",
+    visibility = ["//visibility:public"],
+)
+
 exports_files(
     [
         "cdktf-project-runner.sh.tpl",
@@ -18,5 +30,80 @@ sh_binary(
 sh_binary(
     name = "cdktf_terraform_data",
     main = "cdktf-terraform-data.sh",
+    visibility = ["//visibility:public"],
+)
+
+toolchain(
+    name = "linux_amd64_toolchain",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    toolchain = "//terraform/default:linux_amd64",
+    toolchain_type = ":toolchain_type",
+)
+
+toolchain(
+    name = "linux_arm64_toolchain",
+    exec_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    toolchain = "//terraform/default:linux_arm64",
+    toolchain_type = ":toolchain_type",
+)
+
+toolchain(
+    name = "macos_amd64_toolchain",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:macos",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:macos",
+    ],
+    toolchain = "//terraform/default:darwin_amd64",
+    toolchain_type = ":toolchain_type",
+)
+
+toolchain(
+    name = "macos_arm64_toolchain",
+    exec_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:macos",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:macos",
+    ],
+    toolchain = "//terraform/default:darwin_arm64",
+    toolchain_type = ":toolchain_type",
+)
+
+toolchain(
+    name = "windows_amd64_toolchain",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:windows",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:windows",
+    ],
+    toolchain = "//terraform/default:windows_amd64",
+    toolchain_type = ":toolchain_type",
+)
+
+toolchain_type(
+    name = "toolchain_type",
     visibility = ["//visibility:public"],
 )

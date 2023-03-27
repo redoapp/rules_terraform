@@ -9,4 +9,4 @@ def npm_repositories():
         js_directory_npm_plugin(),
     ]
 
-    npm("npm", PACKAGES, ROOTS, plugins)
+    npm("rules_terraform_npm", PACKAGES, ROOTS, plugins)

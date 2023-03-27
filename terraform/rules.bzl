@@ -1,6 +1,7 @@
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@rules_file//generate:providers.bzl", "FormatterInfo")
 load("@rules_file//util:path.bzl", "runfile_path")
+load(":providers.bzl", "TerraformInfo")
 
 def _cdktf_bin_impl(ctx):
     actions = ctx.actions
@@ -13,7 +14,7 @@ def _cdktf_bin_impl(ctx):
     name = ctx.attr.name
     path = ctx.attr.path
     runner = ctx.file._runner
-    terraform = ctx.file._terraform
+    terraform = ctx.attr.terraform[TerraformInfo]
     workspace = ctx.workspace_name
 
     if not path.startswith("/"):
@@ -31,7 +32,10 @@ def _cdktf_bin_impl(ctx):
         template = runner,
     )
 
-    runfiles = ctx.runfiles(files = [terraform], root_symlinks = {"%s/%s" % (path, "cdktf.json"): config, "_path/terraform": terraform})
+    runfiles = ctx.runfiles(
+        files = [terraform.bin],
+        root_symlinks = {"%s/%s" % (path, "cdktf.json"): config, "_path/terraform": terraform.bin},
+    )
     runfiles = runfiles.merge(bin_default.default_runfiles)
     runfiles = runfiles.merge(cdktf_default.default_runfiles)
     default_info = DefaultInfo(
@@ -44,27 +48,29 @@ def _cdktf_bin_impl(ctx):
 cdktf_bin = rule(
     attrs = {
         "bin": attr.label(
+            doc = "Executable",
             cfg = "target",
             executable = True,
             mandatory = True,
         ),
         "cdktf": attr.label(
+            doc = "CDKTF CLI",
             cfg = "target",
+            default = ":cdktf",
             executable = True,
-            mandatory = True,
         ),
         "config": attr.label(
             allow_single_file = [".json"],
             mandatory = True,
         ),
         "path": attr.string(),
+        "terraform": attr.label(
+            default = ":terraform",
+            providers = [TerraformInfo],
+        ),
         "_runner": attr.label(
             allow_single_file = True,
             default = "cdktf-project-runner.sh.tpl",
-        ),
-        "_terraform": attr.label(
-            allow_single_file = True,
-            default = "@terraform//:terraform",
         ),
     },
     implementation = _cdktf_bin_impl,
@@ -108,12 +114,13 @@ cdktf_synth = rule(
     implementation = _cdktf_synth_impl,
 )
 
-def cdktf_project(name, cdktf, bin, config, visibility = None):
+def cdktf_project(name, bin, config, cdktf = None, terraform = None, visibility = None):
     cdktf_bin(
         name = name,
         bin = bin,
         cdktf = cdktf,
         config = config,
+        terraform = terraform,
         visibility = visibility,
     )
 
@@ -122,6 +129,23 @@ def cdktf_project(name, cdktf, bin, config, visibility = None):
         cdktf_bin = name,
         visibility = visibility,
     )
+
+def _tf_toolchain(ctx):
+    bin = ctx.file.bin
+
+    toolchain_info = platform_common.ToolchainInfo(
+        bin = bin,
+    )
+
+    return [toolchain_info]
+
+tf_toolchain = rule(
+    attrs = {
+        "bin": attr.label(allow_single_file = True, mandatory = True),
+    },
+    implementation = _tf_toolchain,
+    provides = [platform_common.ToolchainInfo],
+)
 
 def _tf_format(ctx, src, out, bin):
     ctx.actions.run_shell(
@@ -132,10 +156,10 @@ def _tf_format(ctx, src, out, bin):
     )
 
 def _tf_format_impl(ctx):
-    terraform = ctx.file._terraform
+    terraform = ctx.attr.terraform[TerraformInfo]
 
     def format(ctx, path, src, out):
-        _tf_format(ctx, src, out, terraform)
+        _tf_format(ctx, src, out, terraform.bin)
 
     format_info = FormatterInfo(fn = format)
 
@@ -144,7 +168,10 @@ def _tf_format_impl(ctx):
 tf_format = rule(
     implementation = _tf_format_impl,
     attrs = {
-        "_terraform": attr.label(allow_single_file = True, default = "@terraform//:terraform"),
+        "terraform": attr.label(
+            default = ":terraform",
+            providers = [TerraformInfo],
+        ),
     },
 )
 
@@ -156,7 +183,7 @@ def _tf_project_impl(ctx):
     name = ctx.attr.name
     path = ctx.attr.path
     runner = ctx.file._runner
-    terraform = ctx.file._terraform
+    terraform = ctx.attr.terraform[TerraformInfo]
     workspace = ctx.workspace_name
 
     if not path.startswith("/"):
@@ -169,12 +196,12 @@ def _tf_project_impl(ctx):
         substitutions = {
             "%{package}": shell.quote("/".join(path.split("/")[1:])),
             "%{path}": shell.quote(path),
-            "%{terraform}": shell.quote(runfile_path(workspace, terraform)),
+            "%{terraform}": shell.quote(runfile_path(workspace, terraform.bin)),
         },
         template = runner,
     )
 
-    runfiles = ctx.runfiles(files = [terraform] + data)
+    runfiles = ctx.runfiles(files = [terraform.bin] + data)
     runfiles = runfiles.merge_all([default_info.default_runfiles for default_info in data_default])
     default_info = DefaultInfo(
         executable = executable,
@@ -189,13 +216,13 @@ tf_project = rule(
             allow_files = True,
         ),
         "path": attr.string(),
+        "terraform": attr.label(
+            default = ":terraform",
+            providers = [TerraformInfo],
+        ),
         "_runner": attr.label(
             allow_single_file = True,
             default = ":terraform-project-runner.sh.tpl",
-        ),
-        "_terraform": attr.label(
-            allow_single_file = True,
-            default = "@terraform//:terraform",
         ),
     },
     executable = True,
@@ -247,7 +274,7 @@ tf_import_cdktf_data = rule(
     implementation = _tf_import_cdktf_data_impl,
 )
 
-def tf_import_cdktf(name, lock, stack, synth, visibility = None):
+def tf_import_cdktf(name, lock, stack, synth, terraform = None, visibility = None):
     tf_import_cdktf_data(
         name = ".cdktf/%s" % name,
         lock = lock,
@@ -260,6 +287,7 @@ def tf_import_cdktf(name, lock, stack, synth, visibility = None):
         name = name,
         data = [":.cdktf/%s" % name],
         path = ".cdktf/%s" % name,
+        terraform = terraform,
         visibility = visibility,
     )
 
@@ -318,4 +346,19 @@ tf_lock = rule(
     },
     executable = True,
     implementation = _tf_lock_impl,
+)
+
+def _tf_toolchain_terraform_impl(ctx):
+    toolchain = ctx.toolchains[":toolchain_type"]
+
+    terraform_info = TerraformInfo(
+        bin = toolchain.bin,
+    )
+
+    return [terraform_info]
+
+tf_toolchain_terraform = rule(
+    implementation = _tf_toolchain_terraform_impl,
+    toolchains = [":toolchain_type"],
+    provides = [TerraformInfo],
 )

@@ -1,0 +1,24 @@
+load("@better_rules_javascript//nodejs:rules.bzl", "nodejs_binary")
+load("//terraform:rules.bzl", "tf_toolchain", "tf_toolchain_terraform")
+load("//terraform:terraform.bzl", "TERRAFORM_PLATFORMS")
+
+nodejs_binary(
+    name = "cdktf",
+    dep = "@rules_terraform_npm//cdktf-cli:lib",
+    main = "bundle/bin/cdktf",
+    visibility = ["//visibility:public"],
+)
+
+tf_toolchain_terraform(
+    name = "terraform",
+    visibility = ["//visibility:public"],
+)
+
+[
+    tf_toolchain(
+        name = platform,
+        bin = "@terraform_%s//:terraform" % platform,
+        visibility = ["//visibility:public"],
+    )
+    for platform in TERRAFORM_PLATFORMS
+]
