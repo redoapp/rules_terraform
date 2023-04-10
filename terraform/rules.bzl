@@ -274,7 +274,7 @@ tf_import_cdktf_data = rule(
     implementation = _tf_import_cdktf_data_impl,
 )
 
-def tf_import_cdktf(name, lock, stack, synth, terraform = None, visibility = None):
+def tf_import_cdktf(name, lock, stack, synth, data = [], terraform = None, visibility = None):
     tf_import_cdktf_data(
         name = ".cdktf/%s" % name,
         lock = lock,
@@ -285,7 +285,7 @@ def tf_import_cdktf(name, lock, stack, synth, terraform = None, visibility = Non
 
     tf_project(
         name = name,
-        data = [":.cdktf/%s" % name],
+        data = [":.cdktf/%s" % name] + data,
         path = ".cdktf/%s" % name,
         terraform = terraform,
         visibility = visibility,
