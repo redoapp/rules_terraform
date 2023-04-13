@@ -13,6 +13,6 @@ fi
 
 [ -z "${BUILD_WORKSPACE_DIRECTORY-}" ] || export TF_DATA_DIR="$BUILD_WORKSPACE_DIRECTORY"/%{package}/.terraform
 
-cd "$RUNFILES_DIR"/%{path}
+export TF_VAR_runfiles_dir="$RUNFILES_DIR"
 
-exec "$RUNFILES_DIR"/%{terraform} "$@"
+exec "$RUNFILES_DIR"/%{terraform} -chdir="$RUNFILES_DIR"/%{path} "$@"
