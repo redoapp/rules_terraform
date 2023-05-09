@@ -1,5 +1,6 @@
 load("@better_rules_javascript//nodejs:rules.bzl", "nodejs_binary")
-load("//terraform:rules.bzl", "tf_toolchain", "tf_toolchain_terraform")
+load("//terraform:platform.bzl", "PLATFORMS")
+load("//terraform:rules.bzl", "tf_platform_toolchain", "tf_toolchain", "tf_toolchain_terraform")
 load("//terraform:terraform.bzl", "TERRAFORM_PLATFORMS")
 
 nodejs_binary(
@@ -21,4 +22,17 @@ tf_toolchain_terraform(
         visibility = ["//visibility:public"],
     )
     for platform in TERRAFORM_PLATFORMS
+]
+
+[
+    tf_platform_toolchain(
+        name = "platform_%s_%s" % (
+            platform.os,
+            platform.arch,
+        ),
+        arch = platform.arch,
+        os = platform.os,
+        visibility = ["//visibility:public"],
+    )
+    for platform in PLATFORMS
 ]

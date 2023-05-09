@@ -1,7 +1,8 @@
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@rules_file//generate:providers.bzl", "FormatterInfo")
 load("@rules_file//util:path.bzl", "runfile_path")
-load(":providers.bzl", "TerraformInfo")
+load(":providers.bzl", "TerraformInfo", "TerraformProviderInfo")
 
 def _cdktf_bin_impl(ctx):
     actions = ctx.actions
@@ -32,10 +33,11 @@ def _cdktf_bin_impl(ctx):
         template = runner,
     )
 
-    runfiles = ctx.runfiles(
-        files = [terraform.bin],
-        root_symlinks = {"%s/%s" % (path, "cdktf.json"): config, "_path/terraform": terraform.bin},
-    )
+    root_symlinks = {
+        "%s/%s" % (path, "cdktf.json"): config,
+        "_path/terraform": terraform.bin,
+    }
+    runfiles = ctx.runfiles(root_symlinks = root_symlinks)
     runfiles = runfiles.merge(bin_default.default_runfiles)
     runfiles = runfiles.merge(cdktf_default.default_runfiles)
     default_info = DefaultInfo(
@@ -130,6 +132,155 @@ def cdktf_project(name, bin, config, cdktf = None, terraform = None, visibility 
         visibility = visibility,
     )
 
+def _tf_bin_impl(ctx):
+    actions = ctx.actions
+    name = ctx.attr.name
+    terraform = ctx.attr.terraform[TerraformInfo]
+    runner = ctx.file._runner
+    workspace = ctx.workspace_name
+
+    executable = actions.declare_file(name)
+    actions.expand_template(
+        is_executable = True,
+        output = executable,
+        substitutions = {
+            "%{exec}": shell.quote(runfile_path(workspace, terraform.bin)),
+        },
+        template = runner,
+    )
+
+    runfiles = ctx.runfiles(files = [terraform.bin])
+    default_info = DefaultInfo(executable = executable, runfiles = runfiles)
+
+    return [default_info]
+
+tf_bin = rule(
+    attrs = {
+        "terraform": attr.label(default = ":terraform", providers = [TerraformInfo]),
+        "_runner": attr.label(allow_single_file = True, default = "//util:exec-runner.sh.tpl"),
+    },
+    executable = True,
+    implementation = _tf_bin_impl,
+)
+
+def _tf_platform_toolchain_impl(ctx):
+    arch = ctx.attr.arch
+    os = ctx.attr.os
+
+    toolchain_info = platform_common.ToolchainInfo(
+        arch = arch,
+        os = os
+    )
+
+    return [toolchain_info]
+
+tf_platform_toolchain = rule(
+    attrs = {
+        "arch": attr.string(mandatory = True),
+        "os": attr.string(mandatory = True),
+    },
+    implementation = _tf_platform_toolchain_impl,
+    provides = [platform_common.ToolchainInfo],
+)
+
+def _tf_provider_impl(ctx):
+    actions = ctx.actions
+    hostname = ctx.attr.hostname
+    name = ctx.attr.name
+    namespace = ctx.attr.namespace
+    src = ctx.file.src
+    type = ctx.attr.type
+    version = ctx.attr.version
+
+    tf_provider_info = TerraformProviderInfo(
+        hostname = hostname,
+        file = src,
+        namespace = namespace,
+        type = type,
+        version = version,
+    )
+
+    default_info = DefaultInfo(files = depset([src]))
+
+    return [default_info, tf_provider_info]
+
+tf_provider = rule(
+    attrs = {
+        "hostname": attr.string(default = "registry.terraform.io"),
+        "namespace": attr.string(default = "hashicorp"),
+        "type": attr.string(mandatory = True),
+        "version": attr.string(mandatory = True),
+        "src": attr.label(allow_single_file = True),
+    },
+    implementation = _tf_provider_impl,
+    provides = [TerraformProviderInfo],
+)
+
+def _tf_provider_toolchain_impl(ctx):
+    src = ctx.file.src
+
+    toolchain_info = platform_common.ToolchainInfo(
+        file = src,
+    )
+
+    return [toolchain_info]
+
+tf_provider_toolchain = rule(
+    attrs = {
+        "src": attr.label(allow_single_file = True, mandatory = True),
+    },
+    implementation = _tf_provider_toolchain_impl,
+    provides = [platform_common.ToolchainInfo],
+)
+
+def _tf_providers_resolve_impl(ctx):
+    actions = ctx.actions
+    bash_runfiles_default = ctx.attr._bash_runfiles[DefaultInfo]
+    name = ctx.attr.name
+    path = ctx.attr.path
+    providers = ctx.attr.providers
+    label = ctx.label
+    resolve = ctx.executable._resolve
+    resolve_default = ctx.attr._resolve[DefaultInfo]
+    runner = ctx.file._runner
+    workspace = ctx.workspace_name
+
+    if not path.startswith("/") and label.package:
+        path = "%s/%s" % (label.package, path)
+
+    executable = actions.declare_file(name)
+    actions.expand_template(
+        is_executable = True,
+        output = executable,
+        substitutions = {
+            "%{path}": shell.quote(path),
+            "%{providers}": " ".join([
+                shell.quote("%s=%s" % (name, provider))
+                for name, provider in providers.items()
+            ]),
+            "%{resolve}": shell.quote(runfile_path(workspace, resolve)),
+        },
+        template = runner,
+    )
+
+    runfiles = bash_runfiles_default.default_runfiles
+    runfiles = runfiles.merge(resolve_default.default_runfiles)
+    default_info = DefaultInfo(executable = executable, runfiles = runfiles)
+
+    return [default_info]
+
+tf_providers_resolve = rule(
+    attrs = {
+        "path": attr.string(mandatory = True),
+        "providers": attr.string_dict(),
+        "_bash_runfiles": attr.label(default = "@bazel_tools//tools/bash/runfiles"),
+        "_resolve": attr.label(cfg = "target", default = "//terraform/resolve:bin", executable = True),
+        "_runner": attr.label(allow_single_file = True, default = "providers-resolve.sh.tpl"),
+    },
+    executable = True,
+    implementation = _tf_providers_resolve_impl,
+)
+
 def _tf_toolchain(ctx):
     bin = ctx.file.bin
 
@@ -179,21 +330,76 @@ def _tf_project_impl(ctx):
     actions = ctx.actions
     data = ctx.files.data
     data_default = [target[DefaultInfo] for target in ctx.attr.data]
+    data_dir = ctx.attr.data_dir or "%s/.terraform" % ctx.attr.name
     label = ctx.label
     name = ctx.attr.name
     path = ctx.attr.path
+    platform = ctx.toolchains[":platform_toolchain"]
+    providers = [target[TerraformProviderInfo] for target in ctx.attr.providers]
     runner = ctx.file._runner
     terraform = ctx.attr.terraform[TerraformInfo]
+    terraform_exec = ctx.attr.terraform[TerraformInfo]
     workspace = ctx.workspace_name
 
     if not path.startswith("/"):
         path = "/".join([part for part in [workspace, label.package, path] if part])
+
+    if not data_dir.startswith("/"):
+        data_dir = "/".join([part for part in [label.package, data_dir] if part])
+
+    dummy = actions.declare_file("%s.dummy" % name)
+    actions.write(dummy, content = "")
+
+    lock = actions.declare_file("%s.terraform.lock.hcl" % name)
+
+    lock_src = actions.declare_file("%s.lock/main.tf" % name)
+    lock_src_content = ""
+    lock_src_content += "terraform {\n"
+    lock_src_content += "required_providers {\n"
+    for i, provider in enumerate(providers):
+        lock_src_content += "provider%s = { source = %s, version = %s }\n" % (
+            i,
+            json.encode("%s/%s/%s" % (provider.hostname, provider.namespace, provider.type)),
+            json.encode(provider.version)
+        )
+    lock_src_content += "}\n"
+    lock_src_content += "}\n"
+    actions.write(
+        output = lock_src,
+        content = lock_src_content,
+    )
+
+    symlinks = []
+    for provider in providers:
+        symlink = actions.declare_directory("%s.lock/plugins/%s/%s/%s/%s/%s_%s" % (name, provider.hostname, provider.namespace, provider.type, provider.version, platform.os, platform.arch))
+        symlinks.append(symlink)
+        actions.symlink(
+            output = symlink,
+            target_file = provider.file
+        )
+    args = actions.args()
+    args.add("%s/%s.lock" % (paths.dirname(dummy.path), name))
+    args.add(terraform_exec.bin)
+    args.add(lock)
+    args.add("%s_%s" % (platform.os, platform.arch))
+    actions.run_shell(
+        arguments = [args],
+        command = """
+            set -x
+            dir="$(pwd)"
+            (cd "$1" && "$dir"/"$2" providers lock -fs-mirror=plugins -platform="$4")
+            mv "$1"/.terraform.lock.hcl "$3"
+        """,
+        inputs = [lock_src, terraform_exec.bin] + symlinks,
+        outputs = [lock],
+    )
 
     executable = actions.declare_file(name)
     actions.expand_template(
         is_executable = True,
         output = executable,
         substitutions = {
+            "%{data_dir}": shell.quote(data_dir),
             "%{package}": shell.quote("/".join(path.split("/")[1:])),
             "%{path}": shell.quote(path),
             "%{terraform}": shell.quote(runfile_path(workspace, terraform.bin)),
@@ -201,7 +407,12 @@ def _tf_project_impl(ctx):
         template = runner,
     )
 
-    runfiles = ctx.runfiles(files = [terraform.bin] + data)
+    root_symlinks = {"%s/%s" % (path, ".terraform.lock.hcl"): lock}
+    for provider in providers:
+        provider_path = "%s/%s/%s/%s/%s_%s" % (provider.hostname, provider.namespace, provider.type, provider.version, platform.os, platform.arch)
+        root_symlinks["%s/terraform.d/plugins/%s" % (path, provider_path)] = provider.file
+
+    runfiles = ctx.runfiles(files = [terraform.bin] + data, root_symlinks = root_symlinks)
     runfiles = runfiles.merge_all([default_info.default_runfiles for default_info in data_default])
     default_info = DefaultInfo(
         executable = executable,
@@ -215,7 +426,9 @@ tf_project = rule(
         "data": attr.label_list(
             allow_files = True,
         ),
+        "data_dir": attr.string(),
         "path": attr.string(),
+        "providers": attr.label_list(providers = [TerraformProviderInfo]),
         "terraform": attr.label(
             default = ":terraform",
             providers = [TerraformInfo],
@@ -224,16 +437,21 @@ tf_project = rule(
             allow_single_file = True,
             default = ":terraform-project-runner.sh.tpl",
         ),
+        "_terraform_exec": attr.label(
+            cfg = "exec",
+            default = ":terraform",
+            providers = [TerraformInfo],
+        ),
     },
     executable = True,
     implementation = _tf_project_impl,
+    toolchains = [":platform_toolchain"],
 )
 
 def _tf_import_cdktf_data_impl(ctx):
     actions = ctx.actions
     cdktf_terraform_data = ctx.executable._cdktf_terraform_data
     cdktf_terraform_data_default = ctx.attr._cdktf_terraform_data[DefaultInfo]
-    lock = ctx.file.lock
     name = ctx.attr.name
     stack = ctx.attr.stack
     synth = ctx.file.synth
@@ -241,9 +459,9 @@ def _tf_import_cdktf_data_impl(ctx):
 
     out = actions.declare_directory(name)
     actions.run(
-        arguments = [synth.path, out.path, stack, lock.path],
+        arguments = [synth.path, out.path, stack],
         executable = cdktf_terraform_data,
-        inputs = [lock, synth],
+        inputs = [synth],
         outputs = [out],
         tools = [cdktf_terraform_data_default.files_to_run],
     )
@@ -254,10 +472,6 @@ def _tf_import_cdktf_data_impl(ctx):
 
 tf_import_cdktf_data = rule(
     attrs = {
-        "lock": attr.label(
-            allow_single_file = True,
-            mandatory = True,
-        ),
         "stack": attr.string(
             mandatory = True,
         ),
@@ -274,10 +488,9 @@ tf_import_cdktf_data = rule(
     implementation = _tf_import_cdktf_data_impl,
 )
 
-def tf_import_cdktf(name, lock, stack, synth, data = [], terraform = None, visibility = None):
+def tf_import_cdktf(name, stack, synth, data = [], data_dir = None, providers = None, terraform = None, visibility = None):
     tf_import_cdktf_data(
-        name = ".cdktf/%s" % name,
-        lock = lock,
+        name = "%s.cdktf" % name,
         stack = stack,
         synth = synth,
         visibility = ["//visibility:private"],
@@ -285,71 +498,13 @@ def tf_import_cdktf(name, lock, stack, synth, data = [], terraform = None, visib
 
     tf_project(
         name = name,
-        data = [":.cdktf/%s" % name] + data,
-        path = ".cdktf/%s" % name,
+        data = [":%s.cdktf" % name] + data,
+        data_dir = data_dir,
+        path = "%s.cdktf" % name,
+        providers = providers,
         terraform = terraform,
         visibility = visibility,
     )
-
-def _tf_lock_impl(ctx):
-    actions = ctx.actions
-    output = ctx.attr.output or "%s%s" % ("%s/" % ctx.label.package if ctx.label.package else "", ".terraform.lock.hcl")
-    label = ctx.label
-    name = ctx.attr.name
-    path = ctx.attr.path
-    platforms = ctx.attr.platforms
-    runner = ctx.file._runner
-    terraform = ctx.executable.terraform
-    terraform_default = ctx.attr.terraform[DefaultInfo]
-    workspace = ctx.workspace_name
-
-    if not output.startswith("/"):
-        output = "/".join([part for part in [label.package, output] if part])
-
-    if not path.startswith("/"):
-        path = "/".join([part for part in [workspace, label.package, path] if part])
-
-    executable = actions.declare_file(name)
-    actions.expand_template(
-        is_executable = True,
-        output = executable,
-        substitutions = {
-            "%{args}": " ".join([shell.quote("-platform=%s" % platform) for platform in platforms]),
-            "%{output}": shell.quote(output),
-            "%{path}": shell.quote(path),
-            "%{terraform}": shell.quote(runfile_path(workspace, terraform)),
-        },
-        template = runner,
-    )
-
-    runfiles = terraform_default.default_runfiles
-    default_info = DefaultInfo(
-        executable = executable,
-        runfiles = runfiles,
-    )
-
-    return [default_info]
-
-tf_lock = rule(
-    attrs = {
-        "output": attr.string(),
-        "path": attr.string(
-            mandatory = True,
-        ),
-        "platforms": attr.string_list(),
-        "terraform": attr.label(
-            cfg = "target",
-            executable = True,
-            mandatory = True,
-        ),
-        "_runner": attr.label(
-            allow_single_file = True,
-            default = "terraform-lock-runner.sh.tpl",
-        ),
-    },
-    executable = True,
-    implementation = _tf_lock_impl,
-)
 
 def _tf_toolchain_terraform_impl(ctx):
     toolchain = ctx.toolchains[":toolchain_type"]

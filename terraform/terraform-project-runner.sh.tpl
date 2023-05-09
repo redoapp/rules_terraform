@@ -11,8 +11,10 @@ fi
 
 [[ "$RUNFILES_DIR" == /* ]] || RUNFILES_DIR="$(pwd)"/"$RUNFILES_DIR"
 
-[ -z "${BUILD_WORKSPACE_DIRECTORY-}" ] || export TF_DATA_DIR="$BUILD_WORKSPACE_DIRECTORY"/%{package}/.terraform
+[ -z "${BUILD_WORKSPACE_DIRECTORY-}" ] || export TF_DATA_DIR="$BUILD_WORKSPACE_DIRECTORY"/%{data_dir}
 
 export TF_VAR_runfiles_dir="$RUNFILES_DIR"
 
-exec "$RUNFILES_DIR"/%{terraform} -chdir="$RUNFILES_DIR"/%{path} "$@"
+cd "$RUNFILES_DIR"/%{path}
+
+exec "$RUNFILES_DIR"/%{terraform} "$@"

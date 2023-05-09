@@ -1,3 +1,5 @@
+load("//util:collection.bzl", "unique")
+
 TERRAFORM_REPOS = {
     "1.4.2": {
         "darwin_amd64": struct(
@@ -18,4 +20,4 @@ TERRAFORM_REPOS = {
     },
 }
 
-TERRAFORM_PLATFORMS = {name: None for repos in TERRAFORM_REPOS.values() for name in repos.keys()}.keys()
+TERRAFORM_PLATFORMS = unique([name for repos in TERRAFORM_REPOS.values() for name in repos.keys()])

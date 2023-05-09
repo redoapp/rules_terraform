@@ -1,4 +1,5 @@
 load("//sh:rules.bzl", "sh_binary")
+load(":platform.bzl", "PLATFORMS", "cpu_constraints", "os_constraints")
 
 alias(
     name = "terraform",
@@ -15,6 +16,7 @@ alias(
 exports_files(
     [
         "cdktf-project-runner.sh.tpl",
+        "providers-resolve.sh.tpl",
         "terraform-lock-runner.sh.tpl",
         "terraform-project-runner.sh.tpl",
     ],
@@ -87,3 +89,25 @@ toolchain_type(
     name = "toolchain_type",
     visibility = ["//visibility:public"],
 )
+
+toolchain_type(
+    name = "platform_toolchain",
+)
+
+[
+    toolchain(
+        name = "platform_%s_%s" % (os_name, cpu_name),
+        target_compatible_with = [
+            cpu,
+            os,
+        ],
+        toolchain = "//terraform/default:platform_%s_%s" % (
+            platform.os,
+            platform.arch,
+        ),
+        toolchain_type = ":platform_toolchain",
+    )
+    for platform in PLATFORMS
+    for os_name, os in os_constraints(platform.os).items()
+    for cpu_name, cpu in cpu_constraints(platform.arch).items()
+]

@@ -1,0 +1,13 @@
+load("@rules_file//file:rules.bzl", "directory")
+load("@rules_terraform//terraform:rules.bzl", "tf_provider_toolchain")
+
+directory(
+    name = "src",
+    strip_prefix = "files",
+    srcs = glob(["files/**"]),
+)
+
+tf_provider_toolchain(
+    name = "provider",
+    src = ":src",
+)

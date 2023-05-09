@@ -121,6 +121,14 @@ http_archive(
 
 # Rules Terraform
 
+load("//terraform:workspace.bzl", "tf_repositories", "tf_toolchains")
+
+tf_repositories()
+
+tf_toolchains()
+
+# Internal
+
 load("//tools/file:workspace.bzl", "file_repositories")
 
 file_repositories()
@@ -128,3 +136,7 @@ file_repositories()
 load("//tools/npm:workspace.bzl", "npm_repositories")
 
 npm_repositories()
+
+load("//terraform/test:workspace.bzl", "tf_test_repositories")
+
+tf_test_repositories()
