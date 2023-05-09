@@ -453,11 +453,11 @@ def _tf_import_cdktf_data_impl(ctx):
     cdktf_terraform_data = ctx.executable._cdktf_terraform_data
     cdktf_terraform_data_default = ctx.attr._cdktf_terraform_data[DefaultInfo]
     name = ctx.attr.name
+    out = ctx.outputs.output
     stack = ctx.attr.stack
     synth = ctx.file.synth
     workspace = ctx.workspace_name
 
-    out = actions.declare_file("%s.tf.json" % name)
     actions.run(
         arguments = [synth.path, out.path, stack],
         executable = cdktf_terraform_data,
@@ -472,6 +472,7 @@ def _tf_import_cdktf_data_impl(ctx):
 
 tf_import_cdktf_data = rule(
     attrs = {
+        "output": attr.output(mandatory = True),
         "stack": attr.string(
             mandatory = True,
         ),
@@ -491,6 +492,7 @@ tf_import_cdktf_data = rule(
 def tf_import_cdktf(name, stack, synth, data = [], data_dir = None, providers = None, terraform = None, visibility = None):
     tf_import_cdktf_data(
         name = "%s.cdktf" % name,
+        output = "%s.tf/cdk.tf.json" % name,
         stack = stack,
         synth = synth,
         visibility = ["//visibility:private"],
@@ -500,6 +502,7 @@ def tf_import_cdktf(name, stack, synth, data = [], data_dir = None, providers = 
         name = name,
         data = [":%s.cdktf" % name] + data,
         data_dir = data_dir,
+        path = "%s.tf" % name,
         providers = providers,
         terraform = terraform,
         visibility = visibility,
