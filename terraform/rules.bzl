@@ -169,7 +169,7 @@ def _tf_platform_toolchain_impl(ctx):
 
     toolchain_info = platform_common.ToolchainInfo(
         arch = arch,
-        os = os
+        os = os,
     )
 
     return [toolchain_info]
@@ -360,7 +360,7 @@ def _tf_project_impl(ctx):
         lock_src_content += "provider%s = { source = %s, version = %s }\n" % (
             i,
             json.encode("%s/%s/%s" % (provider.hostname, provider.namespace, provider.type)),
-            json.encode(provider.version)
+            json.encode(provider.version),
         )
     lock_src_content += "}\n"
     lock_src_content += "}\n"
@@ -375,7 +375,7 @@ def _tf_project_impl(ctx):
         symlinks.append(symlink)
         actions.symlink(
             output = symlink,
-            target_file = provider.file
+            target_file = provider.file,
         )
     args = actions.args()
     args.add("%s/%s.lock" % (paths.dirname(dummy.path), name))
@@ -457,7 +457,7 @@ def _tf_import_cdktf_data_impl(ctx):
     synth = ctx.file.synth
     workspace = ctx.workspace_name
 
-    out = actions.declare_directory(name)
+    out = actions.declare_file("%s.tf.json" % name)
     actions.run(
         arguments = [synth.path, out.path, stack],
         executable = cdktf_terraform_data,
@@ -500,7 +500,6 @@ def tf_import_cdktf(name, stack, synth, data = [], data_dir = None, providers = 
         name = name,
         data = [":%s.cdktf" % name] + data,
         data_dir = data_dir,
-        path = "%s.cdktf" % name,
         providers = providers,
         terraform = terraform,
         visibility = visibility,
