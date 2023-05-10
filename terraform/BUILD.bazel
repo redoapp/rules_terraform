@@ -1,4 +1,4 @@
-load(":platform.bzl", "PLATFORMS", "cpu_constraints", "os_constraints")
+load(":platform.bzl", "cpu_constraints", "os_constraints")
 
 exports_files(
     [

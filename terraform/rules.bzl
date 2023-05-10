@@ -2,7 +2,8 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@rules_file//generate:providers.bzl", "FormatterInfo")
 load("@rules_file//util:path.bzl", "runfile_path")
-load(":providers.bzl", "TerraformInfo", "TerraformProviderInfo")
+load(":terraform.bzl", "TerraformInfo")
+load(":provider.bzl", "TerraformProviderInfo")
 
 def _tf_platform_toolchain_impl(ctx):
     arch = ctx.attr.arch

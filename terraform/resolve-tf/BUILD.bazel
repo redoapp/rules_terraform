@@ -1,0 +1,8 @@
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_binary(
+    name = "bin",
+    srcs = glob(["src/**/*.py"]),
+    main = "src/rulesterraform/terraformresolvetf/__main__.py",
+    visibility = ["//:__subpackages__"],
+)

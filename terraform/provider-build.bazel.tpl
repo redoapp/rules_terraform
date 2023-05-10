@@ -1,4 +1,5 @@
 load("@rules_terraform//terraform:platform.bzl", "cpu_constraints", "os_constraints", "parse_platform")
+load("@rules_terraform//terraform:provider.bzl", "provider_toolchain_name")
 load("@rules_terraform//terraform:rules.bzl", "tf_provider")
 load(":rules.bzl", "provider_src")
 
@@ -22,7 +23,7 @@ toolchain_type(
 
 [
     toolchain(
-        name = "toolchain_%s_%s" % (os, cpu),
+        name = provider_toolchain_name(os, cpu),
         exec_compatible_with = [cpu_constraint, os_constraint],
         toolchain = provider,
         toolchain_type = ":toolchain_type",

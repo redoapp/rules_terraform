@@ -1,6 +1,6 @@
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@rules_file//util:path.bzl", "runfile_path")
-load("//terraform:providers.bzl", "TerraformInfo")
+load("//terraform:terraform.bzl", "TerraformInfo")
 load("//terraform:rules.bzl", "tf_project")
 
 def _cdktf_bin_impl(ctx):

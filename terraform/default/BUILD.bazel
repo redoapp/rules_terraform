@@ -1,6 +1,6 @@
-load("//terraform:platform.bzl", "PLATFORMS", "cpu_constraints", "os_constraints")
+load("//terraform:platform.bzl", "PLATFORMS", "cpu_constraints", "os_constraints", "parse_platform")
 load("//terraform:rules.bzl", "tf_platform_toolchain", "tf_toolchain", "tf_toolchain_terraform")
-load("//terraform:terraform.bzl", "TERRAFORM_PLATFORMS")
+load(":terraform.bzl", "TERRAFORM")
 
 tf_toolchain_terraform(
     name = "terraform",
@@ -27,15 +27,12 @@ tf_toolchain_terraform(
             cpu,
             os,
         ],
-        toolchain = "@terraform_%s_%s//:tf" % (
-            platform.os,
-            platform.arch,
-        ),
+        toolchain = "@terraform_%s//:tf" % platform,
         toolchain_type = "//terraform:toolchain_type",
     )
-    for platform in PLATFORMS
-    for os_name, os in os_constraints(platform.os).items()
-    for cpu_name, cpu in cpu_constraints(platform.arch).items()
+    for platform in {platform: None for value in TERRAFORM.values() for platform in value.keys()}.keys()
+    for os_name, os in os_constraints(parse_platform(platform).os).items()
+    for cpu_name, cpu in cpu_constraints(parse_platform(platform).arch).items()
 ]
 
 [

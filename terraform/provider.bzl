@@ -1,9 +1,3 @@
-TerraformInfo = provider(
-    fields = {
-        "bin": "Terraform executable",
-    },
-)
-
 TerraformProviderInfo = provider(
     fields = {
         "file": "File",
@@ -29,3 +23,6 @@ def provider_src_rule(toolchain):
         toolchains = [toolchain],
         implementation = impl,
     )
+
+def provider_toolchain_name(os, cpu):
+    return "toolchain_%s_%s" % (os, cpu)

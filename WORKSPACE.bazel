@@ -121,11 +121,9 @@ http_archive(
 
 # Rules Terraform
 
-load("//terraform:workspace.bzl", "tf_repositories", "tf_toolchains")
+load("//:workspace.bzl", rules_terraform_deps = "deps")
 
-tf_repositories()
-
-tf_toolchains()
+rules_terraform_deps()
 
 # Internal
 
