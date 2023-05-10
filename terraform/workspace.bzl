@@ -75,15 +75,14 @@ def tf_repositories(version = "1.4.2"):
         )
 
 def tf_toolchains():
-    native.register_toolchains(
-        "@rules_terraform//terraform:linux_amd64_toolchain",
-        "@rules_terraform//terraform:linux_arm64_toolchain",
-        "@rules_terraform//terraform:macos_amd64_toolchain",
-        "@rules_terraform//terraform:macos_arm64_toolchain",
-        "@rules_terraform//terraform:windows_amd64_toolchain",
-    )
     native.register_toolchains(*[
-        "@rules_terraform//terraform:platform_%s_%s" % (os, cpu)
+        "@rules_terraform//terraform/default:terraform_%s_%s_toolchain" % (os, cpu)
+        for platform in PLATFORMS
+        for os in os_constraints(platform.os)
+        for cpu in cpu_constraints(platform.arch)
+    ])
+    native.register_toolchains(*[
+        "@rules_terraform//terraform/default:platform_%s_%s_toolchain" % (os, cpu)
         for platform in PLATFORMS
         for os in os_constraints(platform.os)
         for cpu in cpu_constraints(platform.arch)

@@ -1,0 +1,10 @@
+exports_files(
+    ["project-runner.sh.tpl"],
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "cdktf",
+    actual = "//cdktf/default:cdktf",
+    visibility = ["//visibility:public"],
+)

@@ -1,5 +1,4 @@
-filegroup(
-    name = "runner",
-    srcs = ["runner.sh.tpl"],
+exports_files(
+    ["runner.sh.tpl"],
     visibility = ["//visibility:public"],
 )

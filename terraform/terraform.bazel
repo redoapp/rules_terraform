@@ -1,1 +1,7 @@
-exports_files(["terraform"], visibility = ["//visibility:public"])
+load("@rules_terraform//terraform:rules.bzl", "tf_toolchain")
+
+tf_toolchain(
+    name = "tf",
+    bin = "terraform",
+    visibility = ["//visibility:public"],
+)

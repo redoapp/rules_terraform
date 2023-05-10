@@ -1,0 +1,8 @@
+load("@better_rules_javascript//nodejs:rules.bzl", "nodejs_binary")
+
+nodejs_binary(
+    name = "cdktf",
+    dep = "@rules_terraform_npm//cdktf-cli:lib",
+    main = "bundle/bin/cdktf",
+    visibility = ["//visibility:public"],
+)
