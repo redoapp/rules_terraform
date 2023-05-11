@@ -220,8 +220,6 @@ def _tf_project_impl(ctx):
         )
     args = actions.args()
     args.add("--platform", "%s_%s" % (platform.os, platform.arch))
-    for provider in providers:
-        args.add("--provider", "%s/%s/%s/%s" % (provider.hostname, provider.namespace, provider.type, provider.version))
     args.add("--providers", "%s/%s.plugins" % (paths.dirname(dummy.path), name))
     args.add("--terraform", terraform_exec.bin)
     args.add(lockfile)

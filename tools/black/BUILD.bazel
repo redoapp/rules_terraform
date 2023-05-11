@@ -1,0 +1,7 @@
+load("@rules_file//black:rules.bzl", "configure_black")
+
+configure_black(
+    name = "black",
+    options = ["-C"],
+    visibility = ["//:__subpackages__"],
+)

@@ -3,6 +3,8 @@ load("@rules_python//python:defs.bzl", "py_library")
 py_binary(
     name = "bin",
     srcs = glob(["src/**/*.py"]),
+    imports = ["src"],
+    legacy_create_init = False,
     main = "src/rulesterraform/terraformlock/__main__.py",
     visibility = ["//visibility:public"],
 )

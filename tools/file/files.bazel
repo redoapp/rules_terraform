@@ -1,4 +1,10 @@
 filegroup(
+    name = "black_files",
+    srcs = glob(["files/**/*.py"]),
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
     name = "buildifier_files",
     srcs = glob(["files/**/*.bazel", "files/**/*.bzl"]),
     visibility = ["//visibility:public"],

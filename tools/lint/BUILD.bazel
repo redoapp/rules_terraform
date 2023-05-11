@@ -1,6 +1,13 @@
 load("@rules_file//generate:rules.bzl", "format", "formatter_composite", "generate_test", "multi_generate")
 
 format(
+    name = "black_format",
+    srcs = ["@files//:black_files"],
+    formatter = "//tools/black",
+    strip_prefix = "/files",
+)
+
+format(
     name = "buildifier_format",
     srcs = ["@files//:buildifier_files"],
     formatter = "//tools/buildifier",
@@ -11,6 +18,7 @@ multi_generate(
     name = "lint",
     visibility = ["//:__subpackages__"],
     deps = [
+        ":black_format",
         ":buildifier_format",
         ":prettier_format",
     ],
