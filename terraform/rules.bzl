@@ -196,7 +196,7 @@ def _tf_project_impl(ctx):
     providers = [target[TerraformProviderInfo] for target in ctx.attr.providers]
     runner = ctx.file._runner
     terraform = ctx.attr.terraform[TerraformInfo]
-    terraform_exec = ctx.attr.terraform[TerraformInfo]
+    terraform_exec = ctx.attr._terraform_exec[TerraformInfo]
     workspace = ctx.workspace_name
 
     if not path.startswith("/"):
