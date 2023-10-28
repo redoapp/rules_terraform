@@ -25,7 +25,9 @@ def resolve(providers, out, registry=None):
         else:
             raise RuntimeError(f"{provider} not found")
 
-        for platform in version.platforms:
+        for platform in sorted(
+            version.platforms, key=lambda platform: (platform.os, platform.arch)
+        ):
             package = client.get_package(
                 provider.namespace, provider.type, provider.version, platform
             )
