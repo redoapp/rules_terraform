@@ -10,6 +10,7 @@ def _cdktf_bin_impl(ctx):
     cdktf = ctx.executable.cdktf
     cdktf_default = ctx.attr.cdktf[DefaultInfo]
     config = ctx.file.config
+    fake_node = ctx.executable._fake_node
     label = ctx.label
     name = ctx.attr.name
     path = ctx.attr.path
@@ -34,6 +35,7 @@ def _cdktf_bin_impl(ctx):
 
     root_symlinks = {
         "%s/%s" % (path, "cdktf.json"): config,
+        "_path/node": fake_node,
         "_path/terraform": terraform.bin,
     }
     runfiles = ctx.runfiles(root_symlinks = root_symlinks)
@@ -68,6 +70,11 @@ cdktf_bin = rule(
         "terraform": attr.label(
             default = "//terraform",
             providers = [TerraformInfo],
+        ),
+        "_fake_node": attr.label(
+            cfg = "target",
+            default = ":fake_node",
+            executable = True,
         ),
         "_runner": attr.label(
             allow_single_file = True,

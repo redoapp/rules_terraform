@@ -8,3 +8,9 @@ alias(
     actual = "//cdktf/default:cdktf",
     visibility = ["//visibility:public"],
 )
+
+sh_binary(
+    name = "fake_node",
+    srcs = ["fake-node.sh"],
+    visibility = ["//visibility:public"],
+)
