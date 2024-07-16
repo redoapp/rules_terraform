@@ -184,6 +184,7 @@ tf_format = rule(
 
 def _tf_project_impl(ctx):
     actions = ctx.actions
+    config = ctx.file.config or (ctx.file._config_default if ctx.attr.config_default else None)
     data = ctx.files.data
     data_default = [target[DefaultInfo] for target in ctx.attr.data]
     data_dir = ctx.attr.data_dir or "%s/.terraform" % ctx.attr.name
@@ -238,6 +239,7 @@ def _tf_project_impl(ctx):
         is_executable = True,
         output = executable,
         substitutions = {
+            "%{config}": shell.quote(runfile_path(workspace, config)) if config else "",
             "%{data_dir}": shell.quote(data_dir),
             "%{package}": shell.quote("/".join(path.split("/")[1:])),
             "%{path}": shell.quote(path),
@@ -249,9 +251,9 @@ def _tf_project_impl(ctx):
     root_symlinks = {"%s/%s" % (path, ".terraform.lock.hcl"): lockfile}
     for provider in providers:
         provider_path = "%s/%s/%s/%s/%s_%s" % (provider.hostname, provider.namespace, provider.type, provider.version, platform.os, platform.arch)
-        root_symlinks["%s/terraform.d/plugins/%s" % (path, provider_path)] = provider.file
+        root_symlinks["%s/plugins/%s" % (path, provider_path)] = provider.file
 
-    runfiles = ctx.runfiles(files = [terraform.bin] + data, root_symlinks = root_symlinks)
+    runfiles = ctx.runfiles(files = [terraform.bin] + ([config] if config else []) + data, root_symlinks = root_symlinks)
     runfiles = runfiles.merge_all([default_info.default_runfiles for default_info in data_default])
     default_info = DefaultInfo(
         executable = executable,
@@ -266,11 +268,17 @@ tf_project = rule(
             allow_files = True,
         ),
         "data_dir": attr.string(),
+        "config": attr.label(allow_single_file = True),
+        "config_default": attr.bool(default = True),
         "path": attr.string(),
         "providers": attr.label_list(providers = [TerraformProviderInfo]),
         "terraform": attr.label(
             default = ":terraform",
             providers = [TerraformInfo],
+        ),
+        "_config_default": attr.label(
+            allow_single_file = True,
+            default = "config.tfrc",
         ),
         "_lock": attr.label(
             cfg = "exec",

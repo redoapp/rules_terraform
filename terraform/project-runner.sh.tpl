@@ -13,6 +13,9 @@ fi
 
 [ -z "${BUILD_WORKSPACE_DIRECTORY-}" ] || export TF_DATA_DIR="$BUILD_WORKSPACE_DIRECTORY"/%{data_dir}
 
+config=%{config}
+[ -z "$config" ] || export TF_CLI_CONFIG_FILE="$RUNFILES_DIR"/"$config"
+
 export TF_VAR_runfiles_dir="$RUNFILES_DIR"
 
 cd "$RUNFILES_DIR"/%{path}

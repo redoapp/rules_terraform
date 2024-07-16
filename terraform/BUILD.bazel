@@ -2,6 +2,7 @@ load(":platform.bzl", "cpu_constraints", "os_constraints")
 
 exports_files(
     [
+        "config.tfrc",
         "providers-resolve.sh.tpl",
         "project-runner.sh.tpl",
     ],

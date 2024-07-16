@@ -32,7 +32,7 @@ def lock(platform: str, providers: Path, terraform: Path, out: Path):
             print("  }", file=f)
             print("}", file=f)
         try:
-            process = check_output(
+            check_output(
                 [
                     terraform.absolute(),
                     "providers",

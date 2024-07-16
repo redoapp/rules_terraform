@@ -175,7 +175,7 @@ cdktf_stack = rule(
     implementation = _cdktf_stack_impl,
 )
 
-def tf_import_cdktf(name, stack, synth, data = [], data_dir = None, providers = None, terraform = None, visibility = None, **kwargs):
+def tf_import_cdktf(name, stack, synth, config = None, config_default = None, data = [], data_dir = None, providers = None, terraform = None, visibility = None, **kwargs):
     cdktf_stack(
         name = "%s.tf/cdk" % name,
         stack = stack,
@@ -186,6 +186,8 @@ def tf_import_cdktf(name, stack, synth, data = [], data_dir = None, providers = 
 
     tf_project(
         name = name,
+        config = config,
+        config_default = config_default,
         data = [":%s.tf/cdk" % name] + data,
         data_dir = data_dir,
         path = "%s.tf" % name,
