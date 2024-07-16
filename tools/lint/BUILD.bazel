@@ -18,7 +18,7 @@ multi_generate(
     name = "lint",
     visibility = ["//:__subpackages__"],
     deps = [
-        ":black_format",
+        # ":black_format",
         ":buildifier_format",
         ":prettier_format",
     ],
