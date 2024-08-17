@@ -1,5 +1,7 @@
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@rules_file//util:path.bzl", "runfile_path")
+load("//terraform:provider.bzl", "TerraformProviderInfo")
 load("//terraform:terraform.bzl", "TerraformInfo")
 load("//terraform:rules.bzl", "tf_project")
 
@@ -82,6 +84,125 @@ cdktf_bin = rule(
         ),
     },
     implementation = _cdktf_bin_impl,
+)
+
+def _cdktf_bindings_impl(ctx):
+    actions = ctx.actions
+    gen = ctx.executable._gen
+    gen_default = ctx.attr._gen[DefaultInfo]
+    language = ctx.attr.language
+    lock = ctx.executable._lock
+    lock_default = ctx.attr._lock[DefaultInfo]
+    terraform = ctx.attr.terraform[TerraformInfo]
+    tf_config = ctx.file._tf_config
+    tf_template = ctx.file._tf_template
+    platform = ctx.toolchains["//terraform:platform_toolchain"]
+    provider = ctx.attr.provider[TerraformProviderInfo]
+    name = ctx.attr.name
+
+    dummy = actions.declare_file("%s.dummy" % name.replace("/", "_"))
+    actions.write(dummy, content = "")
+
+    tf = actions.declare_file("%s.tf/main.tf.json" % name)
+    actions.expand_template(
+        output = tf,
+        substitutions = {
+            "%{name}": json.encode(provider.type),
+            "%{source}": json.encode("%s/%s" % (provider.namespace, provider.type)),
+        },
+        template = tf_template,
+    )
+
+    provider_file = actions.declare_directory("%s.tf/.terraform/providers/%s/%s/%s/%s/%s_%s" % (name, provider.hostname, provider.namespace, provider.type, provider.version, platform.os, platform.arch))
+    actions.symlink(
+        output = provider_file,
+        target_file = provider.file,
+    )
+
+    lockfile = actions.declare_file("%s.tf/.terraform.lock.hcl" % name)
+    args = actions.args()
+    args.add("--platform", "%s_%s" % (platform.os, platform.arch))
+    args.add("--providers", "%s/%s.tf/.terraform/providers" % (paths.dirname(dummy.path), name))
+    args.add("--terraform", terraform.bin)
+    args.add(lockfile)
+    actions.run(
+        arguments = [args],
+        executable = lock,
+        mnemonic = "TfProvidersLock",
+        inputs = [terraform.bin, provider_file],
+        outputs = [lockfile],
+        progress_message = "Creating providers lockfile %{label}",
+        tools = [lock_default.files_to_run],
+    )
+
+    schema = actions.declare_file("%s.schema.json" % name)
+    args = actions.args()
+    args = actions.args()
+    args.add(terraform.bin)
+    args.add("%s/%s.tf" % (paths.dirname(dummy.path), name))
+    args.add(schema)
+    actions.run_shell(
+        arguments = [args],
+        env = {
+            "TF_CLI_CONFIG_FILE": tf_config.path,
+        },
+        command = '"$1" -chdir="$2" providers schema -json > "$3"',
+        inputs = [lockfile, provider_file, terraform.bin, tf, tf_config],
+        outputs = [schema],
+    )
+
+    args = actions.args()
+    out = actions.declare_directory(name)
+    args = actions.args()
+    args.add("provider")
+    args.add("--source", "%s/%s" % (provider.namespace, provider.type))
+    args.add(schema)
+    args.add(out.path)
+    actions.run(
+        arguments = [args],
+        executable = gen,
+        inputs = [schema],
+        tools = [gen_default.files_to_run],
+        outputs = [out],
+    )
+
+    default_info = DefaultInfo(files = depset([out]))
+
+    return [default_info]
+
+cdktf_bindings = rule(
+    attrs = {
+        "language": attr.string(mandatory = True),
+        "provider": attr.label(
+            mandatory = True,
+            providers = [TerraformProviderInfo],
+        ),
+        "terraform": attr.label(
+            cfg = "exec",
+            default = "//terraform",
+            providers = [TerraformInfo],
+        ),
+        "_gen": attr.label(
+            cfg = "exec",
+            default = "//cdktf/gen:bin",
+            executable = True,
+        ),
+        "_lock": attr.label(
+            cfg = "exec",
+            default = "//terraform/lock:bin",
+            executable = True,
+        ),
+        "_tf_config": attr.label(
+            allow_single_file = True,
+            default = "//terraform:config.tfrc",
+        ),
+        "_tf_template": attr.label(
+            allow_single_file = True,
+            default = ":provider.tf.json.tpl",
+        ),
+    },
+    implementation = _cdktf_bindings_impl,
+    toolchains = ["//terraform:platform_toolchain"],
 )
 
 def _cdktf_synth_impl(ctx):

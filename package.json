@@ -1,5 +1,11 @@
 {
   "devDependencies": {
-    "cdktf-cli": "~0.15.5"
+    "@cdktf/commons": "~0.20",
+    "@cdktf/provider-generator": "~0.20",
+    "@types/argparse": "^2",
+    "@types/node": "^18",
+    "argparse": "^2",
+    "cdktf-cli": "~0.15.5",
+    "codemaker": "1.98.0"
   }
 }

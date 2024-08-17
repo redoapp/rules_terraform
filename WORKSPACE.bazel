@@ -63,15 +63,25 @@ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
 gazelle_dependencies(go_repository_default_config = "@//:WORKSPACE.bazel")
 
-# Javascript
+# Rules pkg
 
-JAVASCRIPT_VERSION = "4aabc54f6de2aae5fe069ea553ad7569f7df4ef8"
+RULES_PKG_VERSION = "0.10.1"
+
+http_archive(
+    name = "rules_pkg",
+    sha256 = "d250924a2ecc5176808fc4c25d5cf5e9e79e6346d79d5ab1c493e289e722d1d0",
+    url = "https://github.com/bazelbuild/rules_pkg/releases/download/%s/rules_pkg-%s.tar.gz" % (RULES_PKG_VERSION, RULES_PKG_VERSION),
+)
+
+# Rules Javascript
+
+RULES_JAVASCRIPT_VERSION = "3a33078b1b792fd322df2d233c664e9ccfa87ccf"
 
 http_archive(
     name = "better_rules_javascript",
-    sha256 = "871d5deea001b70e406d5c1abbdb1a7f64c82bc16a883ea1b1ecf33c31719d69",
-    strip_prefix = "rules_javascript-%s" % JAVASCRIPT_VERSION,
-    url = "https://github.com/hello-seer/rules_javascript/archive/%s.tar.gz" % JAVASCRIPT_VERSION,
+    sha256 = "fe08f3b046ff1ec1cece2c935832c9274d4903866958115f6326fee803b426f4",
+    strip_prefix = "rules_javascript-%s" % RULES_JAVASCRIPT_VERSION,
+    url = "https://github.com/redoapp/rules_javascript/archive/%s.tar.gz" % RULES_JAVASCRIPT_VERSION,
 )
 
 load("@better_rules_javascript//rules:workspace.bzl", javascript_repositories = "repositories")

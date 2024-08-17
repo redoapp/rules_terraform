@@ -1,3 +1,5 @@
+.bazel-npm-cache.json
 .yarn
+node_modules
 
 /bazel-*

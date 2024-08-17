@@ -1,5 +1,8 @@
 exports_files(
-    ["project-runner.sh.tpl"],
+    [
+        "project-runner.sh.tpl",
+        "provider.tf.json.tpl",
+    ],
     visibility = ["//visibility:public"],
 )
 

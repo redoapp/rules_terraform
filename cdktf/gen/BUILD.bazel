@@ -1,0 +1,42 @@
+load("@better_rules_javascript//commonjs:rules.bzl", "cjs_root")
+load("@better_rules_javascript//javascript:rules.bzl", "js_library")
+load("@better_rules_javascript//nodejs:rules.bzl", "nodejs_binary")
+load("@better_rules_javascript//typescript:rules.bzl", "ts_library")
+
+nodejs_binary(
+    name = "bin",
+    dep = ":lib",
+    main = "lib/main.js",
+    visibility = ["//visibility:public"],
+)
+
+ts_library(
+    name = "lib",
+    config = "tsconfig.json",
+    config_dep = ":tsconfig",
+    declaration_prefix = "lib",
+    deps = [
+        "@rules_terraform_npm//@types/argparse:lib",
+        "@rules_terraform_npm//argparse:lib",
+         "@rules_terraform_npm//codemaker:lib",
+         "@rules_terraform_npm//@types/node:lib",
+         "@rules_terraform_npm//@cdktf/commons:lib",
+         "@rules_terraform_npm//@cdktf/provider-generator:lib",
+    ],
+    js_prefix = "lib",
+    root = ":root",
+    srcs = glob(["src/**/*.ts"]),
+    strip_prefix = "src",
+)
+
+cjs_root(
+    name = "root",
+    descriptors = ["package.json"],
+    package_name = "@rules-terraform/cdktf-gen",
+)
+
+js_library(
+    name = "tsconfig",
+    srcs = ["tsconfig.json"],
+    root = ":root",
+)
