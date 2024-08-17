@@ -12,27 +12,27 @@ nodejs_binary(
 
 ts_library(
     name = "lib",
+    srcs = glob(["src/**/*.ts"]),
     config = "tsconfig.json",
     config_dep = ":tsconfig",
     declaration_prefix = "lib",
-    deps = [
-        "@rules_terraform_npm//@types/argparse:lib",
-        "@rules_terraform_npm//argparse:lib",
-         "@rules_terraform_npm//codemaker:lib",
-         "@rules_terraform_npm//@types/node:lib",
-         "@rules_terraform_npm//@cdktf/commons:lib",
-         "@rules_terraform_npm//@cdktf/provider-generator:lib",
-    ],
     js_prefix = "lib",
     root = ":root",
-    srcs = glob(["src/**/*.ts"]),
     strip_prefix = "src",
+    deps = [
+        "@rules_terraform_npm//@cdktf/commons:lib",
+        "@rules_terraform_npm//@cdktf/provider-generator:lib",
+        "@rules_terraform_npm//@types/argparse:lib",
+        "@rules_terraform_npm//@types/node:lib",
+        "@rules_terraform_npm//argparse:lib",
+        "@rules_terraform_npm//codemaker:lib",
+    ],
 )
 
 cjs_root(
     name = "root",
-    descriptors = ["package.json"],
     package_name = "@rules-terraform/cdktf-gen",
+    descriptors = ["package.json"],
 )
 
 js_library(

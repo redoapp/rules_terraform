@@ -160,9 +160,12 @@ def _cdktf_bindings_impl(ctx):
     args.add(out.path)
     actions.run(
         arguments = [args],
+        env = {
+            "TERRAFORM_BINARY_NAME": terraform.bin.path,
+        },
         executable = gen,
         inputs = [schema],
-        tools = [gen_default.files_to_run],
+        tools = [gen_default.files_to_run, terraform.bin],
         outputs = [out],
     )
 

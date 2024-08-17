@@ -3,5 +3,5 @@ load("//sh:rules.bzl", "sh_binary")
 sh_binary(
     name = "tf_resolve",
     data = ["//terraform/resolve-tf:bin"],
-    main = "tf-resolve.sh"
+    main = "tf-resolve.sh",
 )

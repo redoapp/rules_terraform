@@ -21,4 +21,5 @@ js_library(
     srcs = [".prettierrc.yml"],
     root = ":root",
     visibility = ["//:__subpackages__"],
+    deps = ["@rules_terraform_npm//prettier-plugin-organize-imports:lib"],
 )

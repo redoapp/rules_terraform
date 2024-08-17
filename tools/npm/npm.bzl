@@ -3330,10 +3330,28 @@ PACKAGES = {
         "name": "prebuild-install",
         "url": "https://registry.npmjs.org/prebuild-install/-/prebuild-install-7.1.1.tgz",
     },
+    "prettier-plugin-organize-imports@3.2.4-dc3fc578": {
+        "deps": [
+            {
+                "id": "prettier@3.3.3",
+            },
+            {
+                "id": "typescript@5.5.4-327073ba",
+            },
+        ],
+        "integrity": "sha512-6m8WBhIp0dfwu0SkgfOxJqh+HpdyfqSSLfKKRZSFbDuEQXDDndb8fTpRWkUrX/uBenkex3MgnVk0J3b3Y5byog==",
+        "name": "prettier-plugin-organize-imports",
+        "url": "https://registry.npmjs.org/prettier-plugin-organize-imports/-/prettier-plugin-organize-imports-3.2.4.tgz",
+    },
     "prettier@2.8.7": {
         "integrity": "sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==",
         "name": "prettier",
         "url": "https://registry.npmjs.org/prettier/-/prettier-2.8.7.tgz",
+    },
+    "prettier@3.3.3": {
+        "integrity": "sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==",
+        "name": "prettier",
+        "url": "https://registry.npmjs.org/prettier/-/prettier-3.3.3.tgz",
     },
     "process-nextick-args@2.0.1": {
         "integrity": "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==",
@@ -3984,6 +4002,11 @@ PACKAGES = {
         "name": "typescript",
         "url": "https://registry.npmjs.org/typescript/-/typescript-3.9.10.tgz",
     },
+    "typescript@5.5.4-327073ba": {
+        "integrity": "sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==",
+        "name": "typescript",
+        "url": "https://registry.npmjs.org/typescript/-/typescript-5.5.4.tgz",
+    },
     "undici-types@5.26.5": {
         "integrity": "sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==",
         "name": "undici-types",
@@ -4376,5 +4399,9 @@ ROOTS = [
     {
         "id": "codemaker@1.98.0",
         "name": "codemaker",
+    },
+    {
+        "id": "prettier-plugin-organize-imports@3.2.4-dc3fc578",
+        "name": "prettier-plugin-organize-imports",
     },
 ]
