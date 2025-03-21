@@ -175,4 +175,48 @@ TERRAFORM = {
             sha256 = "f666aa1388f94c9b86ea01cb884ba53b9132d2cec3d9cac976ad93a2aba901d5",
         ),
     },
+    "1.6.6": {
+        "darwin_amd64": struct(
+            sha256 = "33376343c7e0279b674c1c8b8a31dc3174ac09dd796d32651cc5e3b98f220436",
+        ),
+        "darwin_arm64": struct(
+            sha256 = "01e608fc04cf54869db687a212d60f3dc3d5c828298514857f9e29f8ac1354a9",
+        ),
+        "freebsd_386": struct(
+            sha256 = "2d99bd218cfc45b2be578f0e5077774b6b77d1f553da3ef5d91cf9aef5faf859",
+        ),
+        "freebsd_amd64": struct(
+            sha256 = "9b496f103fef9c3fb9c790b2730b58af21612f084e2d63c6de870e1f611fe4df",
+        ),
+        "freebsd_arm": struct(
+            sha256 = "cd0cce548ebcefc612261b395e30d9fe9ecf35bbe76df8746f8c7291ee084a3a",
+        ),
+        "linux_386": struct(
+            sha256 = "fbe1ea5d043f0f4785fd02948a4cecda111e24741bf6d8fe5a67415416ddf246",
+        ),
+        "linux_amd64": struct(
+            sha256 = "d117883fd98b960c5d0f012b0d4b21801e1aea985e26949c2d1ebb39af074f00",
+        ),
+        "linux_arm": struct(
+            sha256 = "4a5342a4577d462d880bc392e808f453b101a48aaf383baf99383999a2254fc7",
+        ),
+        "linux_arm64": struct(
+            sha256 = "4066567f4ba031036d9b14c1edb85399aac1cfd6bbec89cdd8c26199adb2793b",
+        ),
+        "openbsd_386": struct(
+            sha256 = "bda4162046f58f9288d3dd2d1519184ea57c3efd715820c194f83db4b25f40f4",
+        ),
+        "openbsd_amd64": struct(
+            sha256 = "16fdf92ef4382682a45ec685bbe7d8733353432120674887859259b6b0afb239",
+        ),
+        "solaris_amd64": struct(
+            sha256 = "7a946fe72977f550d5aca29e0dc711cb50f5f0cdb035d1ec05603e08b006ad88",
+        ),
+        "windows_386": struct(
+            sha256 = "56b03a9617c29862a8d9795c37613714ccea7b29e3a348d09ba37d23001c3b0e",
+        ),
+        "windows_amd64": struct(
+            sha256 = "086df90269a7169b9be9051834a8fe1459a6c7f8fea88f228434740c5820cabe",
+        ),
+    },
 }
