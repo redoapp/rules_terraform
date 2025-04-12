@@ -75,18 +75,20 @@ http_archive(
 
 # Rules Javascript
 
-RULES_JAVASCRIPT_VERSION = "3a33078b1b792fd322df2d233c664e9ccfa87ccf"
+RULES_JAVASCRIPT_VERSION = "d1989ea35a6e63962b1b72b98d1170e73660d6bb"
 
 http_archive(
     name = "better_rules_javascript",
-    sha256 = "fe08f3b046ff1ec1cece2c935832c9274d4903866958115f6326fee803b426f4",
+    sha256 = "a9fc20f2e7c2b339162f39691aacee483b8710ca1c0ae99ee5fcca6db35d3c8a",
     strip_prefix = "rules_javascript-%s" % RULES_JAVASCRIPT_VERSION,
     url = "https://github.com/redoapp/rules_javascript/archive/%s.tar.gz" % RULES_JAVASCRIPT_VERSION,
 )
 
 load("@better_rules_javascript//rules:workspace.bzl", javascript_repositories = "repositories")
 
-javascript_repositories()
+javascript_repositories(
+    version = "20.15.1",
+)
 
 # Protobuf
 
@@ -114,31 +116,20 @@ http_archive(
 
 # Files
 
-FILE_VERSION = "a1ad3467b10abe26af810a419df5b695fc25d576"
+RULES_FILE_VERSION = "1a1d8027c1a8603632f11b7a87a4e555c372570d"
 
 http_archive(
     name = "rules_file",
-    sha256 = "2e4b28e2a1dd57fde16f05e88391da32a395ebe58ac88ca749b6e423758b6f84",
-    strip_prefix = "rules_file-%s" % FILE_VERSION,
-    url = "https://github.com/hello-seer/rules_file/archive/%s.zip" % FILE_VERSION,
+    sha256 = "b8d3e02337e10af445d130221a9abe74945bf63006f678b75741676fbefc3a66",
+    strip_prefix = "rules_file-%s" % RULES_FILE_VERSION,
+    url = "https://github.com/redoapp/rules_file/archive/%s.zip" % RULES_FILE_VERSION,
 )
 
-load("@rules_file//rules:init.bzl", "file_init")
+load("@rules_file//buildifier:workspace.bzl", "buildifier_repositories", "buildifier_toolchains")
 
-file_init()
+buildifier_repositories()
 
-load("@rules_file//rules:workspace.bzl", "file_repositories")
-
-file_repositories()
-
-# Buildifier
-
-http_archive(
-    name = "com_github_bazelbuild_buildtools",
-    sha256 = "ae34c344514e08c23e90da0e2d6cb700fcd28e80c02e23e4d5715dddcb42f7b3",
-    strip_prefix = "buildtools-4.2.2",
-    url = "https://github.com/bazelbuild/buildtools/archive/refs/tags/4.2.2.tar.gz",
-)
+buildifier_toolchains()
 
 # Rules Terraform
 
