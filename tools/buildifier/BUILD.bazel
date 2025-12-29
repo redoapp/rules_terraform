@@ -1,4 +1,4 @@
-load("@rules_file//buildifier:rules.bzl", "buildifier")
+load("@bazel_util//buildifier:rules.bzl", "buildifier")
 
 buildifier(
     name = "buildifier",

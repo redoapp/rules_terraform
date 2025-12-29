@@ -1,6 +1,6 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
-load("@rules_file//util:path.bzl", "runfile_path")
+load("@bazel_util//util:path.bzl", "runfile_path")
 load("//terraform:provider.bzl", "TerraformProviderInfo")
 load("//terraform:terraform.bzl", "TerraformInfo")
 load("//terraform:rules.bzl", "tf_project")

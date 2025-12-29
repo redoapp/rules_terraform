@@ -1,4 +1,4 @@
-load("@rules_file//black:rules.bzl", "configure_black")
+load("@bazel_util//black:rules.bzl", "configure_black")
 
 configure_black(
     name = "black",

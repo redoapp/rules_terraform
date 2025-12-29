@@ -1,4 +1,4 @@
-load("@rules_file//file:workspace.bzl", "files")
+load("@bazel_util//file:workspace.bzl", "files")
 
 def file_repositories():
     files(

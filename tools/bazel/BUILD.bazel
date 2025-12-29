@@ -1,4 +1,4 @@
-load("@rules_file//file:rules.bzl", "bazelrc_deleted_packages")
+load("@bazel_util//file:rules.bzl", "bazelrc_deleted_packages")
 
 bazelrc_deleted_packages(
     name = "gen_bazelrc",
