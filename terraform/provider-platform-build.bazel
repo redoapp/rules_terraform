@@ -1,4 +1,4 @@
-load("@rules_file//file:rules.bzl", "directory")
+load("@bazel_util//file:rules.bzl", "directory")
 load("@rules_terraform//terraform:rules.bzl", "tf_provider_toolchain")
 
 directory(

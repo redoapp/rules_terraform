@@ -1,7 +1,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
-load("@rules_file//generate:providers.bzl", "FormatterInfo")
-load("@rules_file//util:path.bzl", "runfile_path")
+load("@bazel_util//generate:providers.bzl", "FormatterInfo")
+load("@bazel_util//util:path.bzl", "runfile_path")
 load(":terraform.bzl", "TerraformInfo")
 load(":provider.bzl", "TerraformProviderInfo")
 

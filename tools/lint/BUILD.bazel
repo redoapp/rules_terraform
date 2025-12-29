@@ -1,4 +1,4 @@
-load("@rules_file//generate:rules.bzl", "format", "formatter_composite", "generate_test", "multi_generate")
+load("@bazel_util//generate:rules.bzl", "format", "formatter_composite", "generate_test", "multi_generate")
 
 format(
     name = "black_format",
