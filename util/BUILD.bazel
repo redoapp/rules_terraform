@@ -1,4 +1,0 @@
-exports_files(
-    ["exec-runner.sh.tpl"],
-    visibility = ["//:__subpackages__"],
-)

@@ -1,5 +1,5 @@
-load("@rules_terraform//terraform:provider.bzl", "provider_src_rule")
+load("%{provider}", "provider_bin_rule")
 
-provider_src = provider_src_rule(
-    toolchain = Label(":toolchain_type"),
+provider_bin = provider_bin_rule(
+    toolchain = Label(":provider_type"),
 )

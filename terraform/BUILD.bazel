@@ -1,4 +1,4 @@
-load(":platform.bzl", "cpu_constraints", "os_constraints")
+load(":rules.bzl", "tf_toolchain_terraform", "tf_toolchains")
 
 exports_files(
     [
@@ -9,18 +9,18 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
-alias(
+tf_toolchain_terraform(
     name = "terraform",
-    actual = "//terraform/default:terraform",
     visibility = ["//visibility:public"],
 )
 
 toolchain_type(
-    name = "toolchain_type",
+    name = "terraform_type",
     visibility = ["//visibility:public"],
 )
 
-toolchain_type(
-    name = "platform_toolchain",
-    visibility = ["//visibility:public"],
+tf_toolchains(
+    name_fmt = "terraform_{name}",
+    toolchain_fmt = "@terraform_{name}//:toolchain",
+    toolchain_type = ":terraform_type",
 )

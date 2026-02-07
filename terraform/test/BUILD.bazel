@@ -1,23 +1,7 @@
-load("//terraform:rules.bzl", "tf_project", "tf_providers_resolve")
+load("//terraform:rules.bzl", "tf_project")
 
 tf_project(
     name = "tf",
     data = glob(["*.tf"]),
-    providers = ["@tf_random//:provider"],
-)
-
-tf_providers_resolve(
-    name = "providers_resolve",
-    path = "providers.bzl",
-    providers = {
-        "random": "registry.terraform.io/hashicorp/random/3.5.1",
-    },
-)
-
-platform(
-    name = "linux_amd64",
-    constraint_values = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
-    ],
+    providers = ["@terraform_provider_random//:provider"],
 )

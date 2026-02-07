@@ -1,0 +1,13 @@
+load("%{rules}", "tf_toolchains")
+
+REPOSITORIES = ["%{repositories}"]
+
+[
+    tf_toolchains(
+        name_fmt = "%s_{name}" % repository,
+        toolchain_fmt = "@%s_{name}//:toolchain" % repository,
+        toolchain_type = "@%s//:provider_type" % repository,
+        visibility = ["//visibility:public"],
+    )
+    for repository in REPOSITORIES
+]

@@ -2,8 +2,8 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@bazel_util//util:path.bzl", "runfile_path")
 load("//terraform:provider.bzl", "TerraformProviderInfo")
-load("//terraform:terraform.bzl", "TerraformInfo")
 load("//terraform:rules.bzl", "tf_project")
+load("//terraform:terraform.bzl", "TerraformInfo")
 
 def _cdktf_bin_impl(ctx):
     actions = ctx.actions
@@ -96,7 +96,6 @@ def _cdktf_bindings_impl(ctx):
     terraform = ctx.attr.terraform[TerraformInfo]
     tf_config = ctx.file._tf_config
     tf_template = ctx.file._tf_template
-    platform = ctx.toolchains["//terraform:platform_toolchain"]
     provider = ctx.attr.provider[TerraformProviderInfo]
     name = ctx.attr.name
 
@@ -113,7 +112,7 @@ def _cdktf_bindings_impl(ctx):
         template = tf_template,
     )
 
-    provider_file = actions.declare_directory("%s.tf/.terraform/providers/%s/%s/%s/%s/%s_%s" % (name, provider.hostname, provider.namespace, provider.type, provider.version, platform.os, platform.arch))
+    provider_file = actions.declare_directory("%s.tf/.terraform/providers/%s/%s/%s/%s/%s_%s" % (name, provider.hostname, provider.namespace, provider.type, provider.version, terraform.os, terraform.arch))
     actions.symlink(
         output = provider_file,
         target_file = provider.file,
@@ -121,7 +120,7 @@ def _cdktf_bindings_impl(ctx):
 
     lockfile = actions.declare_file("%s.tf/.terraform.lock.hcl" % name)
     args = actions.args()
-    args.add("--platform", "%s_%s" % (platform.os, platform.arch))
+    args.add("--platform", "%s_%s" % (terraform.os, terraform.arch))
     args.add("--providers", "%s/%s.tf/.terraform/providers" % (paths.dirname(dummy.path), name))
     args.add("--terraform", terraform.bin)
     args.add(lockfile)
@@ -205,7 +204,6 @@ cdktf_bindings = rule(
         ),
     },
     implementation = _cdktf_bindings_impl,
-    toolchains = ["//terraform:platform_toolchain"],
 )
 
 def _cdktf_synth_impl(ctx):

@@ -1,0 +1,10 @@
+terraform = use_extension("//terraform:extensions.bzl", "terraform", dev_dependency = True)
+terraform.provider(
+    name = "terraform_provider_random",
+    address = "registry.terraform.io/hashicorp/random",
+    version = "3.5.1",
+)
+use_repo(
+    terraform,
+    "terraform_provider_random",
+)

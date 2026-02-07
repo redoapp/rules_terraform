@@ -1,0 +1,13 @@
+load("%{file_rules}", "directory")
+load("%{rules}", "tf_provider_toolchain")
+
+directory(
+    name = "src",
+    srcs = glob(["terraform-provider-*"]),
+)
+
+tf_provider_toolchain(
+    name = "toolchain",
+    src = ":src",
+    visibility = ["//visibility:public"],
+)

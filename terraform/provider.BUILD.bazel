@@ -1,0 +1,21 @@
+load("%{rules}", "tf_provider")
+load(":rules.bzl", "provider_bin")
+
+provider_bin(
+    name = "src",
+)
+
+tf_provider(
+    name = "provider",
+    hostname = "%{hostname}",
+    namespace = "%{namespace}",
+    src = ":src",
+    type = "%{type}",
+    version = "%{version}",
+    visibility = ["//visibility:public"],
+)
+
+toolchain_type(
+    name = "provider_type",
+    visibility = ["//visibility:public"],
+)

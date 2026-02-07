@@ -2,28 +2,8 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@bazel_util//generate:providers.bzl", "FormatterInfo")
 load("@bazel_util//util:path.bzl", "runfile_path")
-load(":terraform.bzl", "TerraformInfo")
 load(":provider.bzl", "TerraformProviderInfo")
-
-def _tf_platform_toolchain_impl(ctx):
-    arch = ctx.attr.arch
-    os = ctx.attr.os
-
-    toolchain_info = platform_common.ToolchainInfo(
-        arch = arch,
-        os = os,
-    )
-
-    return [toolchain_info]
-
-tf_platform_toolchain = rule(
-    attrs = {
-        "arch": attr.string(mandatory = True),
-        "os": attr.string(mandatory = True),
-    },
-    implementation = _tf_platform_toolchain_impl,
-    provides = [platform_common.ToolchainInfo],
-)
+load(":terraform.bzl", "TerraformInfo")
 
 def _tf_provider_impl(ctx):
     actions = ctx.actions
@@ -75,66 +55,24 @@ tf_provider_toolchain = rule(
     provides = [platform_common.ToolchainInfo],
 )
 
-def _tf_providers_resolve_impl(ctx):
-    actions = ctx.actions
-    bash_runfiles_default = ctx.attr._bash_runfiles[DefaultInfo]
-    name = ctx.attr.name
-    path = ctx.attr.path
-    providers = ctx.attr.providers
-    label = ctx.label
-    resolve = ctx.executable._resolve
-    resolve_default = ctx.attr._resolve[DefaultInfo]
-    runner = ctx.file._runner
-    workspace = ctx.workspace_name
-
-    if not path.startswith("/") and label.package:
-        path = "%s/%s" % (label.package, path)
-
-    executable = actions.declare_file(name)
-    actions.expand_template(
-        is_executable = True,
-        output = executable,
-        substitutions = {
-            "%{path}": shell.quote(path),
-            "%{providers}": " ".join([
-                shell.quote("%s=%s" % (name, provider))
-                for name, provider in providers.items()
-            ]),
-            "%{resolve}": shell.quote(runfile_path(workspace, resolve)),
-        },
-        template = runner,
-    )
-
-    runfiles = bash_runfiles_default.default_runfiles
-    runfiles = runfiles.merge(resolve_default.default_runfiles)
-    default_info = DefaultInfo(executable = executable, runfiles = runfiles)
-
-    return [default_info]
-
-tf_providers_resolve = rule(
-    attrs = {
-        "path": attr.string(mandatory = True),
-        "providers": attr.string_dict(),
-        "_bash_runfiles": attr.label(default = "@bazel_tools//tools/bash/runfiles"),
-        "_resolve": attr.label(cfg = "target", default = "//terraform/resolve:bin", executable = True),
-        "_runner": attr.label(allow_single_file = True, default = "providers-resolve.sh.tpl"),
-    },
-    executable = True,
-    implementation = _tf_providers_resolve_impl,
-)
-
 def _tf_toolchain(ctx):
+    arch = ctx.attr.arch
     bin = ctx.file.bin
+    os = ctx.attr.os
 
     toolchain_info = platform_common.ToolchainInfo(
+        arch = arch,
         bin = bin,
+        os = os,
     )
 
     return [toolchain_info]
 
 tf_toolchain = rule(
     attrs = {
+        "arch": attr.string(mandatory = True),
         "bin": attr.label(allow_single_file = True, mandatory = True),
+        "os": attr.string(mandatory = True),
     },
     implementation = _tf_toolchain,
     provides = [platform_common.ToolchainInfo],
@@ -193,7 +131,6 @@ def _tf_project_impl(ctx):
     lock_default = ctx.attr._lock[DefaultInfo]
     name = ctx.attr.name
     path = ctx.attr.path
-    platform = ctx.toolchains[":platform_toolchain"]
     providers = [target[TerraformProviderInfo] for target in ctx.attr.providers]
     runner = ctx.file._runner
     terraform = ctx.attr.terraform[TerraformInfo]
@@ -213,14 +150,14 @@ def _tf_project_impl(ctx):
 
     symlinks = []
     for provider in providers:
-        symlink = actions.declare_directory("%s.plugins/%s/%s/%s/%s/%s_%s" % (name, provider.hostname, provider.namespace, provider.type, provider.version, platform.os, platform.arch))
+        symlink = actions.declare_directory("%s.plugins/%s/%s/%s/%s/%s_%s" % (name, provider.hostname, provider.namespace, provider.type, provider.version, terraform.os, terraform.arch))
         symlinks.append(symlink)
         actions.symlink(
             output = symlink,
             target_file = provider.file,
         )
     args = actions.args()
-    args.add("--platform", "%s_%s" % (platform.os, platform.arch))
+    args.add("--platform", "%s_%s" % (terraform.os, terraform.arch))
     args.add("--providers", "%s/%s.plugins" % (paths.dirname(dummy.path), name))
     args.add("--terraform", terraform_exec.bin)
     args.add(lockfile)
@@ -250,7 +187,7 @@ def _tf_project_impl(ctx):
 
     root_symlinks = {"%s/%s" % (path, ".terraform.lock.hcl"): lockfile}
     for provider in providers:
-        provider_path = "%s/%s/%s/%s/%s_%s" % (provider.hostname, provider.namespace, provider.type, provider.version, platform.os, platform.arch)
+        provider_path = "%s/%s/%s/%s/%s_%s" % (provider.hostname, provider.namespace, provider.type, provider.version, terraform.os, terraform.arch)
         root_symlinks["%s/plugins/%s" % (path, provider_path)] = provider.file
 
     runfiles = ctx.runfiles(files = [terraform.bin] + ([config] if config else []) + data, root_symlinks = root_symlinks)
@@ -297,13 +234,14 @@ tf_project = rule(
     },
     executable = True,
     implementation = _tf_project_impl,
-    toolchains = [":platform_toolchain"],
 )
 
 def _tf_toolchain_terraform_impl(ctx):
-    toolchain = ctx.toolchains[":toolchain_type"]
+    toolchain = ctx.toolchains[":terraform_type"]
 
     terraform_info = TerraformInfo(
+        arch = toolchain.arch,
+        os = toolchain.os,
         bin = toolchain.bin,
     )
 
@@ -311,6 +249,150 @@ def _tf_toolchain_terraform_impl(ctx):
 
 tf_toolchain_terraform = rule(
     implementation = _tf_toolchain_terraform_impl,
-    toolchains = [":toolchain_type"],
+    toolchains = [":terraform_type"],
     provides = [TerraformInfo],
 )
+
+def tf_toolchains(name_fmt, toolchain_fmt, toolchain_type, **kwargs):
+    native.toolchain(
+        name = name_fmt.format(name = "freebsd_i386"),
+        target_compatible_with = [
+            "@platforms//cpu:i386",
+            "@platforms//os:freebsd",
+        ],
+        toolchain = toolchain_fmt.format(name = "freebsd_386"),
+        toolchain_type = toolchain_type,
+        **kwargs
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "freebsd_aarch32"),
+        target_compatible_with = [
+            "@platforms//cpu:aarch32",
+            "@platforms//os:freebsd",
+        ],
+        toolchain = toolchain_fmt.format(name = "freebsd_arm"),
+        toolchain_type = toolchain_type,
+        **kwargs
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "freebsd_x86_64"),
+        target_compatible_with = [
+            "@platforms//cpu:x86_64",
+            "@platforms//os:freebsd",
+        ],
+        toolchain = toolchain_fmt.format(name = "freebsd_amd64"),
+        toolchain_type = toolchain_type,
+        **kwargs
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "linux_aarch32"),
+        target_compatible_with = [
+            "@platforms//cpu:aarch32",
+            "@platforms//os:linux",
+        ],
+        toolchain = toolchain_fmt.format(name = "linux_arm"),
+        toolchain_type = toolchain_type,
+        **kwargs
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "linux_aarch64"),
+        target_compatible_with = [
+            "@platforms//cpu:aarch64",
+            "@platforms//os:linux",
+        ],
+        toolchain = toolchain_fmt.format(name = "linux_arm64"),
+        toolchain_type = toolchain_type,
+        **kwargs
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "linux_i386"),
+        target_compatible_with = [
+            "@platforms//cpu:i386",
+            "@platforms//os:linux",
+        ],
+        toolchain = toolchain_fmt.format(name = "linux_386"),
+        toolchain_type = toolchain_type,
+        **kwargs
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "linux_x86_64"),
+        target_compatible_with = [
+            "@platforms//cpu:x86_64",
+            "@platforms//os:linux",
+        ],
+        toolchain = toolchain_fmt.format(name = "linux_amd64"),
+        toolchain_type = toolchain_type,
+        **kwargs
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "macos_aarch64"),
+        target_compatible_with = [
+            "@platforms//cpu:aarch64",
+            "@platforms//os:macos",
+        ],
+        toolchain = toolchain_fmt.format(name = "darwin_arm64"),
+        toolchain_type = toolchain_type,
+        visibility = ["//visibility:public"],
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "macos_x86_64"),
+        target_compatible_with = [
+            "@platforms//cpu:x86_64",
+            "@platforms//os:macos",
+        ],
+        toolchain = toolchain_fmt.format(name = "darwin_arm64"),
+        toolchain_type = toolchain_type,
+        visibility = ["//visibility:public"],
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "openbsd_i386"),
+        target_compatible_with = [
+            "@platforms//cpu:i386",
+            "@platforms//os:openbsd",
+        ],
+        toolchain = toolchain_fmt.format(name = "openbsd_386"),
+        toolchain_type = toolchain_type,
+        visibility = ["//visibility:public"],
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "openbsd_x86_64"),
+        target_compatible_with = [
+            "@platforms//cpu:x86_64",
+            "@platforms//os:openbsd",
+        ],
+        toolchain = toolchain_fmt.format(name = "openbsd_amd64"),
+        toolchain_type = toolchain_type,
+        visibility = ["//visibility:public"],
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "windows_i386"),
+        target_compatible_with = [
+            "@platforms//cpu:i386",
+            "@platforms//os:windows",
+        ],
+        toolchain = toolchain_fmt.format(name = "windows_386"),
+        toolchain_type = toolchain_type,
+        visibility = ["//visibility:public"],
+    )
+
+    native.toolchain(
+        name = name_fmt.format(name = "windows_x86_64"),
+        target_compatible_with = [
+            "@platforms//cpu:x86_64",
+            "@platforms//os:windows",
+        ],
+        toolchain = toolchain_fmt.format(name = "windows_amd64"),
+        toolchain_type = toolchain_type,
+        visibility = ["//visibility:public"],
+    )

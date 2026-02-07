@@ -1,0 +1,9 @@
+load("%{rules}", "tf_toolchain")
+
+tf_toolchain(
+    name = "toolchain",
+    arch = "%{arch}",
+    bin = "terraform",
+    os = "%{os}",
+    visibility = ["//visibility:public"],
+)

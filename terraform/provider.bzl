@@ -8,21 +8,18 @@ TerraformProviderInfo = provider(
     },
 )
 
-def _provider_src_impl(ctx, toolchain):
+def _provider_bin_impl(ctx, toolchain):
     provider = ctx.toolchains[toolchain]
 
     default_info = DefaultInfo(files = depset([provider.file]))
 
     return [default_info]
 
-def provider_src_rule(toolchain):
+def provider_bin_rule(toolchain):
     def impl(ctx):
-        return _provider_src_impl(ctx, toolchain)
+        return _provider_bin_impl(ctx, toolchain)
 
     return rule(
         toolchains = [toolchain],
         implementation = impl,
     )
-
-def provider_toolchain_name(os, cpu):
-    return "toolchain_%s_%s" % (os, cpu)

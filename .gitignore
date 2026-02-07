@@ -1,4 +1,5 @@
 .bazel-npm-cache.json
+.terraform
 .yarn
 node_modules
 

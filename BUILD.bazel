@@ -2,11 +2,6 @@ load("@better_rules_javascript//commonjs:rules.bzl", "cjs_root")
 load("@better_rules_javascript//javascript:rules.bzl", "js_library")
 
 alias(
-    name = "bazelrc",
-    actual = "//tools/bazel:gen_bazelrc",
-)
-
-alias(
     name = "lint",
     actual = "//tools/lint",
 )
@@ -22,4 +17,9 @@ js_library(
     root = ":root",
     visibility = ["//:__subpackages__"],
     deps = ["@rules_terraform_npm//prettier-plugin-organize-imports:lib"],
+)
+
+alias(
+    name = "refresh",
+    actual = "//tools/bazel:refresh",
 )

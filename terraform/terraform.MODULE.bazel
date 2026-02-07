@@ -1,0 +1,23 @@
+terraform = use_extension("//terraform:extensions.bzl", "terraform")
+use_repo(
+    terraform,
+    "terraform_darwin_amd64",
+    "terraform_darwin_arm64",
+    "terraform_freebsd_386",
+    "terraform_freebsd_amd64",
+    "terraform_linux_386",
+    "terraform_linux_amd64",
+    "terraform_linux_arm",
+    "terraform_linux_arm64",
+    "terraform_openbsd_386",
+    "terraform_openbsd_amd64",
+    "terraform_provider_toolchains",
+    "terraform_solaris_amd64",
+    "terraform_windows_386",
+    "terraform_windows_amd64",
+)
+
+register_toolchains(
+    "@terraform_provider_toolchains//:all",
+    "//terraform:all",
+)

@@ -2,11 +2,10 @@
 startup --host_jvm_args=-Xmx1024m
 
 # Files
-import %workspace%/tools/bazel/deleted.bazelrc
+import %workspace%/tools/file/files.bazelrc
 
 # Repos
 common --enable_workspace
-common --noenable_bzlmod
 
 # Cache
 build --disk_cache ~/.cache/bazel-disk

@@ -1,8 +1,6 @@
 load("@bazel_util//file:rules.bzl", "bazelrc_deleted_packages")
 
-bazelrc_deleted_packages(
-    name = "gen_bazelrc",
-    output = "deleted.bazelrc",
-    packages = ["@files//:packages"],
-    visibility = ["//:__subpackages__"],
+alias(
+    name = "refresh",
+    actual = "@files//packages:bazelrc",
 )
