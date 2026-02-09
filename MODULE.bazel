@@ -17,6 +17,21 @@ archive_override(
 
 include("//tools/file:file.MODULE.bazel")
 
+# JavaScript
+
+bazel_dep(name = "rules_javascript")
+
+RULES_JAVASCRIPT_VERSION = "dc853d3b5ca1bcfab6e51573e1beb8587676323c"
+
+archive_override(
+    module_name = "rules_javascript",
+    sha256 = "42147b63025b43c2cbb474b00e0cc8ebbd16600638f88a7416ea4828c972350e",
+    strip_prefix = "rules_javascript-%s" % RULES_JAVASCRIPT_VERSION,
+    url = "https://github.com/redoapp/rules_javascript/archive/%s.tar.gz" % RULES_JAVASCRIPT_VERSION,
+)
+
+include("//tools/javascript:javascript.MODULE.bazel")
+
 # Platforms
 
 bazel_dep(name = "platforms", version = "1.0.0")
@@ -24,6 +39,19 @@ bazel_dep(name = "platforms", version = "1.0.0")
 # Python
 
 bazel_dep(name = "rules_python", version = "1.4.1")
+
+# Shell
+
+bazel_dep(name = "rules_shell_extra")
+
+RULES_SHELL_EXTRA_VERSION = "93090b47f81577ba4890c770effd889f61ce5d19"
+
+archive_override(
+    module_name = "rules_shell_extra",
+    sha256 = "c69a83b7afefa03b21c370c2044c63c41800820f51680022604133a098e2c932",
+    strip_prefix = "rules_shell_extra-%s" % RULES_SHELL_EXTRA_VERSION,
+    url = "https://github.com/redoapp/rules_shell_extra/archive/%s.tar.gz" % RULES_SHELL_EXTRA_VERSION,
+)
 
 # Skylib
 

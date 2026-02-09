@@ -1,0 +1,11 @@
+yarn = use_extension("@rules_javascript//npm:extensions.bzl", "yarn")
+yarn.workspace(
+    name = "rules_terraform_npm",
+    data = "//tools/javascript:npm.json",
+    path = "/",
+    plugins = [
+        "@rules_javascript//commonjs:npm_plugin.bzl",
+        "@rules_javascript//typescript:npm_plugin.bzl",
+    ],
+)
+use_repo(yarn, npm = "rules_terraform_npm")

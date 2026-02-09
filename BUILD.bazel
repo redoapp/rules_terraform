@@ -1,5 +1,5 @@
-load("@better_rules_javascript//commonjs:rules.bzl", "cjs_root")
-load("@better_rules_javascript//javascript:rules.bzl", "js_library")
+load("@rules_javascript//commonjs:rules.bzl", "cjs_root")
+load("@rules_javascript//javascript:rules.bzl", "js_library")
 
 alias(
     name = "lint",
@@ -16,7 +16,7 @@ js_library(
     srcs = [".prettierrc.yml"],
     root = ":root",
     visibility = ["//:__subpackages__"],
-    deps = ["@rules_terraform_npm//prettier-plugin-organize-imports:lib"],
+    deps = ["@npm//prettier-plugin-organize-imports:lib"],
 )
 
 alias(
