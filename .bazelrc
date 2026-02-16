@@ -17,11 +17,10 @@ sync --disk_cache ~/.cache/bazel-disk
 
 # Build
 build -k
-build --nocheck_visibility
 
 # Test
 build --nozip_undeclared_test_outputs
 build --test_output=all
 
 # User settings
-try-import %workspace%/user.bazelrc
+try-import %workspace%/.bazelrc.user

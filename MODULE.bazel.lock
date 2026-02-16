@@ -10,6 +10,7 @@
     "https://bcr.bazel.build/modules/abseil-cpp/20230802.1/MODULE.bazel": "fa92e2eb41a04df73cdabeec37107316f7e5272650f81d6cc096418fe647b915",
     "https://bcr.bazel.build/modules/abseil-cpp/20240116.1/MODULE.bazel": "37bcdb4440fbb61df6a1c296ae01b327f19e9bb521f9b8e26ec854b6f97309ed",
     "https://bcr.bazel.build/modules/abseil-cpp/20240116.1/source.json": "9be551b8d4e3ef76875c0d744b5d6a504a27e3ae67bc6b28f46415fd2d2957da",
+    "https://bcr.bazel.build/modules/bazel_features/1.1.0/MODULE.bazel": "cfd42ff3b815a5f39554d97182657f8c4b9719568eb7fded2b9135f084bf760b",
     "https://bcr.bazel.build/modules/bazel_features/1.1.1/MODULE.bazel": "27b8c79ef57efe08efccbd9dd6ef70d61b4798320b8d3c134fd571f78963dbcd",
     "https://bcr.bazel.build/modules/bazel_features/1.11.0/MODULE.bazel": "f9382337dd5a474c3b7d334c2f83e50b6eaedc284253334cf823044a26de03e8",
     "https://bcr.bazel.build/modules/bazel_features/1.15.0/MODULE.bazel": "d38ff6e517149dc509406aca0db3ad1efdd890a85e049585b7234d04238e2a4d",
@@ -20,7 +21,11 @@
     "https://bcr.bazel.build/modules/bazel_features/1.30.0/MODULE.bazel": "a14b62d05969a293b80257e72e597c2da7f717e1e69fa8b339703ed6731bec87",
     "https://bcr.bazel.build/modules/bazel_features/1.30.0/source.json": "b07e17f067fe4f69f90b03b36ef1e08fe0d1f3cac254c1241a1818773e3423bc",
     "https://bcr.bazel.build/modules/bazel_features/1.4.1/MODULE.bazel": "e45b6bb2350aff3e442ae1111c555e27eac1d915e77775f6fdc4b351b758b5d7",
+    "https://bcr.bazel.build/modules/bazel_features/1.9.0/MODULE.bazel": "885151d58d90d8d9c811eb75e3288c11f850e1d6b481a8c9f766adee4712358b",
     "https://bcr.bazel.build/modules/bazel_features/1.9.1/MODULE.bazel": "8f679097876a9b609ad1f60249c49d68bfab783dd9be012faf9d82547b14815a",
+    "https://bcr.bazel.build/modules/bazel_lib/3.0.0-rc.0/MODULE.bazel": "d6e00979a98ac14ada5e31c8794708b41434d461e7e7ca39b59b765e6d233b18",
+    "https://bcr.bazel.build/modules/bazel_lib/3.2.0/MODULE.bazel": "39b50d94b9be6bda507862254e20c263f9b950e3160112348d10a938be9ce2c2",
+    "https://bcr.bazel.build/modules/bazel_lib/3.2.0/source.json": "a6f45a903134bebbf33a6166dd42b4c7ab45169de094b37a85f348ca41170a84",
     "https://bcr.bazel.build/modules/bazel_skylib/1.0.3/MODULE.bazel": "bcb0fd896384802d1ad283b4e4eb4d718eebd8cb820b0a2c3a347fb971afd9d8",
     "https://bcr.bazel.build/modules/bazel_skylib/1.1.1/MODULE.bazel": "1add3e7d93ff2e6998f9e118022c84d163917d912f5afafb3058e3d2f1545b5e",
     "https://bcr.bazel.build/modules/bazel_skylib/1.2.0/MODULE.bazel": "44fe84260e454ed94ad326352a698422dbe372b21a1ac9f3eab76eb531223686",
@@ -32,18 +37,30 @@
     "https://bcr.bazel.build/modules/bazel_skylib/1.6.1/MODULE.bazel": "8fdee2dbaace6c252131c00e1de4b165dc65af02ea278476187765e1a617b917",
     "https://bcr.bazel.build/modules/bazel_skylib/1.7.0/MODULE.bazel": "0db596f4563de7938de764cc8deeabec291f55e8ec15299718b93c4423e9796d",
     "https://bcr.bazel.build/modules/bazel_skylib/1.7.1/MODULE.bazel": "3120d80c5861aa616222ec015332e5f8d3171e062e3e804a2a0253e1be26e59b",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.8.1/MODULE.bazel": "88ade7293becda963e0e3ea33e7d54d3425127e0a326e0d17da085a5f1f03ff6",
     "https://bcr.bazel.build/modules/bazel_skylib/1.9.0/MODULE.bazel": "72997b29dfd95c3fa0d0c48322d05590418edef451f8db8db5509c57875fb4b7",
     "https://bcr.bazel.build/modules/bazel_skylib/1.9.0/source.json": "7ad77c1e8c1b84222d9b3f3cae016a76639435744c19330b0b37c0a3c9da7dc0",
     "https://bcr.bazel.build/modules/buildozer/7.1.2/MODULE.bazel": "2e8dd40ede9c454042645fd8d8d0cd1527966aa5c919de86661e62953cd73d84",
     "https://bcr.bazel.build/modules/buildozer/7.1.2/source.json": "c9028a501d2db85793a6996205c8de120944f50a0d570438fcae0457a5f9d1f8",
+    "https://bcr.bazel.build/modules/gazelle/0.32.0/MODULE.bazel": "b499f58a5d0d3537f3cf5b76d8ada18242f64ec474d8391247438bf04f58c7b8",
+    "https://bcr.bazel.build/modules/gazelle/0.33.0/MODULE.bazel": "a13a0f279b462b784fb8dd52a4074526c4a2afe70e114c7d09066097a46b3350",
+    "https://bcr.bazel.build/modules/gazelle/0.34.0/MODULE.bazel": "abdd8ce4d70978933209db92e436deb3a8b737859e9354fb5fd11fb5c2004c8a",
+    "https://bcr.bazel.build/modules/gazelle/0.36.0/MODULE.bazel": "e375d5d6e9a6ca59b0cb38b0540bc9a05b6aa926d322f2de268ad267a2ee74c0",
+    "https://bcr.bazel.build/modules/gazelle/0.47.0/MODULE.bazel": "b61bb007c4efad134aa30ee7f4a8e2a39b22aa5685f005edaa022fbd1de43ebc",
+    "https://bcr.bazel.build/modules/gazelle/0.47.0/source.json": "aeb2e5df14b7fb298625d75d08b9c65bdb0b56014c5eb89da9e5dd0572280ae6",
     "https://bcr.bazel.build/modules/google_benchmark/1.8.2/MODULE.bazel": "a70cf1bba851000ba93b58ae2f6d76490a9feb74192e57ab8e8ff13c34ec50cb",
     "https://bcr.bazel.build/modules/googletest/1.11.0/MODULE.bazel": "3a83f095183f66345ca86aa13c58b59f9f94a2f81999c093d4eeaa2d262d12f4",
     "https://bcr.bazel.build/modules/googletest/1.14.0.bcr.1/MODULE.bazel": "22c31a561553727960057361aa33bf20fb2e98584bc4fec007906e27053f80c6",
     "https://bcr.bazel.build/modules/googletest/1.14.0.bcr.1/source.json": "41e9e129f80d8c8bf103a7acc337b76e54fad1214ac0a7084bf24f4cd924b8b4",
     "https://bcr.bazel.build/modules/googletest/1.14.0/MODULE.bazel": "cfbcbf3e6eac06ef9d85900f64424708cc08687d1b527f0ef65aa7517af8118f",
+    "https://bcr.bazel.build/modules/jq.bzl/0.6.0/MODULE.bazel": "26ec5118e66a55fef36f8ea39d6415d55fc966671fe4d61a6b9ef0cd6bc7b6a1",
+    "https://bcr.bazel.build/modules/jq.bzl/0.6.0/source.json": "2ed4e35b9fa9505495784114f7637fbde5846ec14af917841b6c045d877f20eb",
     "https://bcr.bazel.build/modules/jsoncpp/1.9.5/MODULE.bazel": "31271aedc59e815656f5736f282bb7509a97c7ecb43e927ac1a37966e0578075",
     "https://bcr.bazel.build/modules/jsoncpp/1.9.5/source.json": "4108ee5085dd2885a341c7fab149429db457b3169b86eb081fa245eadf69169d",
     "https://bcr.bazel.build/modules/libpfm/4.11.0/MODULE.bazel": "45061ff025b301940f1e30d2c16bea596c25b176c8b6b3087e92615adbd52902",
+    "https://bcr.bazel.build/modules/package_metadata/0.0.2/MODULE.bazel": "fb8d25550742674d63d7b250063d4580ca530499f045d70748b1b142081ebb92",
+    "https://bcr.bazel.build/modules/package_metadata/0.0.5/MODULE.bazel": "ef4f9439e3270fdd6b9fd4dbc3d2f29d13888e44c529a1b243f7a31dfbc2e8e4",
+    "https://bcr.bazel.build/modules/package_metadata/0.0.5/source.json": "2326db2f6592578177751c3e1f74786b79382cd6008834c9d01ec865b9126a85",
     "https://bcr.bazel.build/modules/platforms/0.0.10/MODULE.bazel": "8cb8efaf200bdeb2150d93e162c40f388529a25852b332cec879373771e48ed5",
     "https://bcr.bazel.build/modules/platforms/0.0.11/MODULE.bazel": "0daefc49732e227caa8bfa834d65dc52e8cc18a2faf80df25e8caea151a9413f",
     "https://bcr.bazel.build/modules/platforms/0.0.4/MODULE.bazel": "9b328e31ee156f53f3c416a64f8491f7eb731742655a47c9eec4703a71644aee",
@@ -62,6 +79,8 @@
     "https://bcr.bazel.build/modules/protobuf/29.1/MODULE.bazel": "557c3457560ff49e122ed76c0bc3397a64af9574691cb8201b4e46d4ab2ecb95",
     "https://bcr.bazel.build/modules/protobuf/29.1/source.json": "04cca85dce26b895ed037d98336d860367fe09919208f2ad383f0df1aff63199",
     "https://bcr.bazel.build/modules/protobuf/3.19.0/MODULE.bazel": "6b5fbb433f760a99a22b18b6850ed5784ef0e9928a72668b66e4d7ccd47db9b0",
+    "https://bcr.bazel.build/modules/protobuf/3.19.2/MODULE.bazel": "532ffe5f2186b69fdde039efe6df13ba726ff338c6bc82275ad433013fa10573",
+    "https://bcr.bazel.build/modules/protobuf/3.19.6/MODULE.bazel": "9233edc5e1f2ee276a60de3eaa47ac4132302ef9643238f23128fea53ea12858",
     "https://bcr.bazel.build/modules/pybind11_bazel/2.11.1/MODULE.bazel": "88af1c246226d87e65be78ed49ecd1e6f5e98648558c14ce99176da041dc378e",
     "https://bcr.bazel.build/modules/pybind11_bazel/2.11.1/source.json": "be4789e951dd5301282729fe3d4938995dc4c1a81c2ff150afc9f1b0504c6022",
     "https://bcr.bazel.build/modules/re2/2023-09-01/MODULE.bazel": "cb3d511531b16cfc78a225a9e2136007a48cf8a677e4264baeab57fe78a80206",
@@ -74,6 +93,7 @@
     "https://bcr.bazel.build/modules/rules_cc/0.0.14/MODULE.bazel": "5e343a3aac88b8d7af3b1b6d2093b55c347b8eefc2e7d1442f7a02dc8fea48ac",
     "https://bcr.bazel.build/modules/rules_cc/0.0.15/MODULE.bazel": "6704c35f7b4a72502ee81f61bf88706b54f06b3cbe5558ac17e2e14666cd5dcc",
     "https://bcr.bazel.build/modules/rules_cc/0.0.16/MODULE.bazel": "7661303b8fc1b4d7f532e54e9d6565771fea666fbdf839e0a86affcd02defe87",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.17/MODULE.bazel": "2ae1d8f4238ec67d7185d8861cb0a2cdf4bc608697c331b95bf990e69b62e64a",
     "https://bcr.bazel.build/modules/rules_cc/0.0.2/MODULE.bazel": "6915987c90970493ab97393024c156ea8fb9f3bea953b2f3ec05c34f19b5695c",
     "https://bcr.bazel.build/modules/rules_cc/0.0.6/MODULE.bazel": "abf360251023dfe3efcef65ab9d56beefa8394d4176dd29529750e1c57eaa33f",
     "https://bcr.bazel.build/modules/rules_cc/0.0.8/MODULE.bazel": "964c85c82cfeb6f3855e6a07054fdb159aced38e99a5eecf7bce9d53990afa3e",
@@ -83,6 +103,11 @@
     "https://bcr.bazel.build/modules/rules_foreign_cc/0.9.0/MODULE.bazel": "c9e8c682bf75b0e7c704166d79b599f93b72cfca5ad7477df596947891feeef6",
     "https://bcr.bazel.build/modules/rules_fuzzing/0.5.2/MODULE.bazel": "40c97d1144356f52905566c55811f13b299453a14ac7769dfba2ac38192337a8",
     "https://bcr.bazel.build/modules/rules_fuzzing/0.5.2/source.json": "c8b1e2c717646f1702290959a3302a178fb639d987ab61d548105019f11e527e",
+    "https://bcr.bazel.build/modules/rules_go/0.41.0/MODULE.bazel": "55861d8e8bb0e62cbd2896f60ff303f62ffcb0eddb74ecb0e5c0cbe36fc292c8",
+    "https://bcr.bazel.build/modules/rules_go/0.42.0/MODULE.bazel": "8cfa875b9aa8c6fce2b2e5925e73c1388173ea3c32a0db4d2b4804b453c14270",
+    "https://bcr.bazel.build/modules/rules_go/0.46.0/MODULE.bazel": "3477df8bdcc49e698b9d25f734c4f3a9f5931ff34ee48a2c662be168f5f2d3fd",
+    "https://bcr.bazel.build/modules/rules_go/0.53.0/MODULE.bazel": "a4ed760d3ac0dbc0d7b967631a9a3fd9100d28f7d9fcf214b4df87d4bfff5f9a",
+    "https://bcr.bazel.build/modules/rules_go/0.53.0/source.json": "c6dc34fb5bb8838652221a167d8f35ca3c8fdcbff8568f13cc75719802f95cff",
     "https://bcr.bazel.build/modules/rules_java/4.0.0/MODULE.bazel": "5a78a7ae82cd1a33cef56dc578c7d2a46ed0dca12643ee45edbb8417899e6f74",
     "https://bcr.bazel.build/modules/rules_java/5.3.5/MODULE.bazel": "a4ec4f2db570171e3e5eb753276ee4b389bae16b96207e9d3230895c99644b86",
     "https://bcr.bazel.build/modules/rules_java/6.0.0/MODULE.bazel": "8a43b7df601a7ec1af61d79345c17b31ea1fedc6711fd4abfd013ea612978e39",
@@ -117,6 +142,7 @@
     "https://bcr.bazel.build/modules/rules_pkg/1.2.0/source.json": "9062e00845bf91a4247465d371baa837adf9b6ff44c542f73ba084f07667e1dc",
     "https://bcr.bazel.build/modules/rules_proto/4.0.0/MODULE.bazel": "a7a7b6ce9bee418c1a760b3d84f83a299ad6952f9903c67f19e4edd964894e06",
     "https://bcr.bazel.build/modules/rules_proto/5.3.0-21.7/MODULE.bazel": "e8dff86b0971688790ae75528fe1813f71809b5afd57facb44dad9e8eca631b7",
+    "https://bcr.bazel.build/modules/rules_proto/6.0.0/MODULE.bazel": "b531d7f09f58dce456cd61b4579ce8c86b38544da75184eadaf0a7cb7966453f",
     "https://bcr.bazel.build/modules/rules_proto/6.0.2/MODULE.bazel": "ce916b775a62b90b61888052a416ccdda405212b6aaeb39522f7dc53431a5e73",
     "https://bcr.bazel.build/modules/rules_proto/7.0.2/MODULE.bazel": "bf81793bd6d2ad89a37a40693e56c61b0ee30f7a7fdbaf3eabbf5f39de47dea2",
     "https://bcr.bazel.build/modules/rules_proto/7.1.0/MODULE.bazel": "002d62d9108f75bb807cd56245d45648f38275cb3a99dcd45dfb864c5d74cb96",
@@ -132,6 +158,8 @@
     "https://bcr.bazel.build/modules/rules_python/1.4.1/MODULE.bazel": "8991ad45bdc25018301d6b7e1d3626afc3c8af8aaf4bc04f23d0b99c938b73a6",
     "https://bcr.bazel.build/modules/rules_python/1.4.1/source.json": "8ec8c90c70ccacc4de8ca1b97f599e756fb59173e898ee08b733006650057c07",
     "https://bcr.bazel.build/modules/rules_shell/0.2.0/MODULE.bazel": "fda8a652ab3c7d8fee214de05e7a9916d8b28082234e8d2c0094505c5268ed3c",
+    "https://bcr.bazel.build/modules/rules_shell/0.3.0/MODULE.bazel": "de4402cd12f4cc8fda2354fce179fdb068c0b9ca1ec2d2b17b3e21b24c1a937b",
+    "https://bcr.bazel.build/modules/rules_shell/0.4.1/MODULE.bazel": "00e501db01bbf4e3e1dd1595959092c2fadf2087b2852d3f553b5370f5633592",
     "https://bcr.bazel.build/modules/rules_shell/0.6.1/MODULE.bazel": "72e76b0eea4e81611ef5452aa82b3da34caca0c8b7b5c0c9584338aa93bae26b",
     "https://bcr.bazel.build/modules/rules_shell/0.6.1/source.json": "20ec05cd5e592055e214b2da8ccb283c7f2a421ea0dc2acbf1aa792e11c03d0c",
     "https://bcr.bazel.build/modules/stardoc/0.5.1/MODULE.bazel": "1a05d92974d0c122f5ccf09291442580317cdd859f07a8655f1db9a60374f9f8",
@@ -143,6 +171,7 @@
     "https://bcr.bazel.build/modules/stardoc/0.7.2/source.json": "58b029e5e901d6802967754adf0a9056747e8176f017cfe3607c0851f4d42216",
     "https://bcr.bazel.build/modules/upb/0.0.0-20220923-a547704/MODULE.bazel": "7298990c00040a0e2f121f6c32544bab27d4452f80d9ce51349b1a28f3005c43",
     "https://bcr.bazel.build/modules/zlib/1.2.11/MODULE.bazel": "07b389abc85fdbca459b69e2ec656ae5622873af3f845e1c9d80fe179f3effa0",
+    "https://bcr.bazel.build/modules/zlib/1.2.12/MODULE.bazel": "3b1a8834ada2a883674be8cbd36ede1b6ec481477ada359cd2d3ddc562340b27",
     "https://bcr.bazel.build/modules/zlib/1.3.1.bcr.5/MODULE.bazel": "eec517b5bbe5492629466e11dae908d043364302283de25581e3eb944326c4ca",
     "https://bcr.bazel.build/modules/zlib/1.3.1.bcr.5/source.json": "22bc55c47af97246cfc093d0acf683a7869377de362b5d1c552c2c2e16b7a806",
     "https://bcr.bazel.build/modules/zlib/1.3.1/MODULE.bazel": "751c9940dcfe869f5f7274e1295422a34623555916eb98c174c1e945594bf198"
@@ -255,73 +284,75 @@
       "_": {
         "_version": "1",
         "providers": {
-          "registry.terraform.io/hashicorp/random/3.5.1": {
+          "registry.terraform.io/hashicorp/random/3.7.2": {
             "darwin-amd64": {
-              "sha256": "04e3fbd610cb52c1017d282531364b9c53ef72b6bc533acb2a90671957324a64",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_darwin_amd64.zip"
+              "sha256": "4d701e978c2dd8604ba1ce962b047607701e65c078cb22e97171513e9e57491f",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_darwin_amd64.zip"
             },
             "darwin-arm64": {
-              "sha256": "6130bdde527587bbe2dcaa7150363e96dbc5250ea20154176d82bc69df5d4ce3",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_darwin_arm64.zip"
+              "sha256": "1e86bcd7ebec85ba336b423ba1db046aeaa3c0e5f921039b3f1a6fc2f978feab",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_darwin_arm64.zip"
             },
             "freebsd-386": {
-              "sha256": "c7c5cde98fe4ef1143bd1b3ec5dc04baf0d4cc3ca2c5c7d40d17c0e9b2076865",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_freebsd_386.zip"
+              "sha256": "24536dec8bde66753f4b4030b8f3ef43c196d69cccbea1c382d01b222478c7a3",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_freebsd_386.zip"
             },
             "freebsd-amd64": {
-              "sha256": "119197103301ebaf7efb91df8f0b6e0dd31e6ff943d231af35ee1831c599188d",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_freebsd_amd64.zip"
+              "sha256": "1527fb07d9fea400d70e9e6eb4a2b918d5060d604749b6f1c361518e7da546dc",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_freebsd_amd64.zip"
             },
             "freebsd-arm": {
-              "sha256": "4d2b219d09abf3b1bb4df93d399ed156cadd61f44ad3baf5cf2954df2fba0831",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_freebsd_arm.zip"
+              "sha256": "29f1786486759fad9b0ce4fdfbbfece9343ad47cd50119045075e05afe49d212",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_freebsd_arm.zip"
             },
             "linux-386": {
-              "sha256": "eab0d0495e7e711cca367f7d4df6e322e6c562fc52151ec931176115b83ed014",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_linux_386.zip"
+              "sha256": "eac7b63e86c749c7d48f527671c7aee5b4e26c10be6ad7232d6860167f99dbb0",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_linux_386.zip"
             },
             "linux-amd64": {
-              "sha256": "de8febe2a2acd9ac454b844a4106ed295ae9520ef54dc8ed2faf29f12716b602",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_linux_amd64.zip"
+              "sha256": "7b8434212eef0f8c83f5a90c6d76feaf850f6502b61b53c329e85b3b281cba34",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_linux_amd64.zip"
             },
             "linux-arm": {
-              "sha256": "ba74c592622ecbcef9dc2a4d81ed321c4e44cddf7da799faa324da9bf52a22b2",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_linux_arm.zip"
+              "sha256": "14829603a32e4bc4d05062f059e545a91e27ff033756b48afbae6b3c835f508f",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_linux_arm.zip"
             },
             "linux-arm64": {
-              "sha256": "6cc326cd4000f724d3086ee05587e7710f032f94fc9af35e96a386a1c6f2214f",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_linux_arm64.zip"
+              "sha256": "dc76e4326aec2490c1600d6871a95e78f9050f9ce427c71707ea412a2f2f1a62",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_linux_arm64.zip"
             },
             "windows-386": {
-              "sha256": "dac4bad52c940cd0dfc27893507c1e92393846b024c5a9db159a93c534a3da03",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_windows_386.zip"
+              "sha256": "ac8a23c212258b7976e1621275e3af7099e7e4a3d4478cf8d5d2a27f3bc3e967",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_windows_386.zip"
             },
             "windows-amd64": {
-              "sha256": "b6d88e1d28cf2dfa24e9fdcc3efc77adcdc1c3c3b5c7ce503a423efbdd6de57b",
-              "url": "https://releases.hashicorp.com/terraform-provider-random/3.5.1/terraform-provider-random_3.5.1_windows_amd64.zip"
+              "sha256": "b516ca74431f3df4c6cf90ddcdb4042c626e026317a33c53f0b445a3d93b720d",
+              "url": "https://releases.hashicorp.com/terraform-provider-random/3.7.2/terraform-provider-random_3.7.2_windows_amd64.zip"
             }
           }
         },
         "sha256s": {
-          "terraform_1.6.6_darwin_amd64.zip": "33376343c7e0279b674c1c8b8a31dc3174ac09dd796d32651cc5e3b98f220436",
-          "terraform_1.6.6_darwin_arm64.zip": "01e608fc04cf54869db687a212d60f3dc3d5c828298514857f9e29f8ac1354a9",
-          "terraform_1.6.6_freebsd_386.zip": "2d99bd218cfc45b2be578f0e5077774b6b77d1f553da3ef5d91cf9aef5faf859",
-          "terraform_1.6.6_freebsd_amd64.zip": "9b496f103fef9c3fb9c790b2730b58af21612f084e2d63c6de870e1f611fe4df",
-          "terraform_1.6.6_freebsd_arm.zip": "cd0cce548ebcefc612261b395e30d9fe9ecf35bbe76df8746f8c7291ee084a3a",
-          "terraform_1.6.6_linux_386.zip": "fbe1ea5d043f0f4785fd02948a4cecda111e24741bf6d8fe5a67415416ddf246",
-          "terraform_1.6.6_linux_amd64.zip": "d117883fd98b960c5d0f012b0d4b21801e1aea985e26949c2d1ebb39af074f00",
-          "terraform_1.6.6_linux_arm.zip": "4a5342a4577d462d880bc392e808f453b101a48aaf383baf99383999a2254fc7",
-          "terraform_1.6.6_linux_arm64.zip": "4066567f4ba031036d9b14c1edb85399aac1cfd6bbec89cdd8c26199adb2793b",
-          "terraform_1.6.6_openbsd_386.zip": "bda4162046f58f9288d3dd2d1519184ea57c3efd715820c194f83db4b25f40f4",
-          "terraform_1.6.6_openbsd_amd64.zip": "16fdf92ef4382682a45ec685bbe7d8733353432120674887859259b6b0afb239",
-          "terraform_1.6.6_solaris_amd64.zip": "7a946fe72977f550d5aca29e0dc711cb50f5f0cdb035d1ec05603e08b006ad88",
-          "terraform_1.6.6_windows_386.zip": "56b03a9617c29862a8d9795c37613714ccea7b29e3a348d09ba37d23001c3b0e",
-          "terraform_1.6.6_windows_amd64.zip": "086df90269a7169b9be9051834a8fe1459a6c7f8fea88f228434740c5820cabe"
-        }
+          "terraform_1.14.5_darwin_amd64.zip": "16efdfb151b49a65fd9b47e30577a6a7012e6edabd2a034445fe7ddf74733ffb",
+          "terraform_1.14.5_darwin_arm64.zip": "132e740024635494900e561014cf4d111a66c6454fcd548dee5cc4cf873ee52f",
+          "terraform_1.14.5_freebsd_386.zip": "693a40a0850f796b01281b2a2376042539b0452258f94da6146655adce30450a",
+          "terraform_1.14.5_freebsd_amd64.zip": "e75d4b3694b62549c4adbeb63146dffb5b58eb879aa59f8214b72f14955f2c24",
+          "terraform_1.14.5_freebsd_arm.zip": "3e10da4d49756f7d63a95d8bfdd8f51b4a516d0cc3b5bb219809dec45fdfafb1",
+          "terraform_1.14.5_linux_386.zip": "7efe66c5c49d77c8d2dd1ef2d1c539b456a223473d96258de0a6da07c7cffe04",
+          "terraform_1.14.5_linux_amd64.zip": "ac21c2b9dcd115711f540cbd27ead0596bb4288a917cb56dfa9b25edb3eb6280",
+          "terraform_1.14.5_linux_arm.zip": "5fe9b93bf93bca52ad20dc95114f269f3bf33b554d7eb5f515f8763f74dc2884",
+          "terraform_1.14.5_linux_arm64.zip": "7dbd03721e8f933ba0426fc292d7a6549a61c0cb1c7c821729f6982c7bce4b05",
+          "terraform_1.14.5_openbsd_386.zip": "4875bfe2fd51cf385084f899231f867be4da35160ef0b37db8cb8e39a1b76b24",
+          "terraform_1.14.5_openbsd_amd64.zip": "1e7e9499d41c500c7a52b51641d82ca1bcf93fc782484e9fb1484740c7695e6e",
+          "terraform_1.14.5_solaris_amd64.zip": "233d4939b68cc73ca7254dad170309e9ef965577fff9872a179a288df0701065",
+          "terraform_1.14.5_windows_386.zip": "543bf69d293755db039cbcec1d2c1effb721640259668fe84ddfc31bcde53702",
+          "terraform_1.14.5_windows_amd64.zip": "3a89de0c0f14f5754d697a792f1c078886fcfdf31a6d4f053e2eade2db5e721d"
+        },
+        "version": "1.14.5"
       }
     },
     "@@bazel_util+//buildifier:extensions.bzl%buildifier": {
       "_": {
+        "_version": "1",
         "sha256s": {
           "buildifier-darwin-amd64": "9f8cffceb82f4e6722a32a021cbc9a5344b386b77b9f79ee095c61d087aaea06",
           "buildifier-darwin-arm64": "cfab310ae22379e69a3b1810b433c4cd2fc2c8f4a324586dfe4cc199943b8d5a",
@@ -337,16 +368,19 @@
       "_": {
         "_version": "1",
         "sha256s": {
-          "node-v24.4.1-darwin-arm64.tar.xz": "7ea25548b120ebaeaffadd37878b83c3d917cbb1eb3e9dbab7cb861bd8763a56",
-          "node-v24.4.1-darwin-x64.tar.xz": "e391194c578cf91e2af35acb30dc6c23fe8893fb3409a2c9a4e25b51f87a6cb0",
-          "node-v24.4.1-headers.tar.xz": "5cc534bca66b184c837923ce5d9cc25ae7f3b3f6d8455ded509da0db041c16d7",
-          "node-v24.4.1-linux-arm64.tar.xz": "555659c36fc72d0617e278b5d26ffcaebc3760a3de354926b1e5f1b0bfd66083",
-          "node-v24.4.1-linux-ppc64le.tar.xz": "2d549d5c63d282012192bf8594ea105b9876e9198d3af8401c61efe15c3d8cb1",
-          "node-v24.4.1-linux-s390x.tar.xz": "70316824c88fa396b12363fb9695b8f9a88f671377056bd86761dc96962240f8",
-          "node-v24.4.1-linux-x64.tar.xz": "7e067b13cd0dc7ee8b239f4ebe1ae54f3bba3a6e904553fcb5f581530eb8306d",
-          "node-v24.4.1-win-arm64.zip": "8cb993d89d13119f582c77a4c734be5bdfeee5557e6cfe850ea1a2f23fa94686",
-          "node-v24.4.1-win-x64.zip": "0428a6ca7544df310de4ed12c10e84c0bc7c9022945dc16de22f7c0dc4893dd2"
-        }
+          "node-v22.17.1-darwin-arm64.tar.xz": "346ed47b18d7ce5ec0b7a3cd24f08623af1a8efdc8069ebc7cb7c38af1bdb7b4",
+          "node-v22.17.1-darwin-x64.tar.xz": "152731560b9753d62a8c67e4bcb4d9b78dcba3f3b4dfcc0ae6e1738595887ed1",
+          "node-v22.17.1-headers.tar.xz": "489aaa932c3bdcb69e4b0cbf2da7e677ef21931b2cc66f36b726ab090f5b26fb",
+          "node-v22.17.1-linux-arm64.tar.xz": "a5bb879af2fe70e7b5dc5e0bbadecba88e87f45bd8e62c0c57b5c815a4cbbaa6",
+          "node-v22.17.1-linux-armv7l.tar.xz": "5be9a0d4808415365dce0fa4d051db93f2a708d175beb956762970971aa3ed81",
+          "node-v22.17.1-linux-ppc64le.tar.xz": "e97d90a254d4741ee4c9ca989fb21d743c0708eb7176cdc78e1b7026a954fe49",
+          "node-v22.17.1-linux-s390x.tar.xz": "c1e144457f6779d18eac9ffc31ca687cc127d27fe7c73092cc321be21d6a1011",
+          "node-v22.17.1-linux-x64.tar.xz": "ff04bc7c3ed7699ceb708dbaaf3580d899ff8bf67f17114f979e83aa74fc5a49",
+          "node-v22.17.1-win-arm64.zip": "588d42c7c90eecf14ed4fc126a64cc70993e3a002f93e26be9c979cdc516b0d3",
+          "node-v22.17.1-win-x64.zip": "b1fdb5635ba860f6bf71474f2ca882459a582de49b1d869451e3ad188e3943eb",
+          "node-v22.17.1-win-x86.zip": "ccfc8901bba74052a4fd9c15ec8e01f45d3014646d909026e3a07a270c4194fb"
+        },
+        "version": "22.17.1"
       }
     }
   }

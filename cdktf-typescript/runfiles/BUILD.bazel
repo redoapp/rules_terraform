@@ -1,0 +1,49 @@
+load("@bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
+load("@rules_javascript//commonjs:rules.bzl", "cjs_root")
+load("@rules_javascript//javascript:rules.bzl", "js_library")
+load("@rules_javascript//typescript:rules.bzl", "ts_library")
+load("@rules_terraform//cdktf:rules.bzl", "cdktf_bindings")
+
+cdktf_bindings(
+    name = "bindings",
+    language = "typescript",
+    provider = "//terraform/runfiles:provider",
+)
+
+ts_library(
+    name = "lib",
+    srcs = [":src_gen"],
+    config = "tsconfig.json",
+    config_dep = ":tsconfig",
+    declaration_prefix = "types",
+    js_prefix = "lib",
+    root = ":root",
+    strip_prefix = "src_gen",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@npm//@types/node:lib",
+        "@npm//cdktf:lib",
+        "@npm//constructs:lib",
+    ],
+)
+
+cjs_root(
+    name = "root",
+    package_name = "@rules-terraform/runfiles",
+    descriptors = ["package.json"],
+)
+
+copy_to_directory(
+    name = "src_gen",
+    srcs = [":bindings"] + glob(["src/**/*.ts"]),
+    replace_prefixes = {
+        "bindings": "",
+        "src": "",
+    },
+)
+
+js_library(
+    name = "tsconfig",
+    srcs = ["tsconfig.json"],
+    root = ":root",
+)

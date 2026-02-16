@@ -1,0 +1,43 @@
+load("@bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+load("//terraform:rules.bzl", "tf_provider")
+
+go_binary(
+    name = "bin",
+    out = "terraform-provider-runfiles_v0.1.0",
+    embed = [":lib"],
+)
+
+go_library(
+    name = "lib",
+    srcs = [
+        "main.go",
+        "provider.go",
+        "rlocation.go",
+    ],
+    importpath = "github.com/redoapp/rules_terraform/terraform/runfiles",
+    deps = [
+        "@com_github_hashicorp_terraform_plugin_framework//datasource",
+        "@com_github_hashicorp_terraform_plugin_framework//function",
+        "@com_github_hashicorp_terraform_plugin_framework//provider",
+        "@com_github_hashicorp_terraform_plugin_framework//providerserver",
+        "@com_github_hashicorp_terraform_plugin_framework//resource",
+        "@com_github_hashicorp_terraform_plugin_framework//types",
+        "@rules_go//go/runfiles",
+    ],
+)
+
+copy_to_directory(
+    name = "src",
+    srcs = [":bin"],
+)
+
+tf_provider(
+    name = "provider",
+    src = ":src",
+    hostname = "redo.com",
+    namespace = "rules-terraform",
+    type = "runfiles",
+    version = "0.1.0",
+    visibility = ["//visibility:public"],
+)

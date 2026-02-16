@@ -1,6 +1,7 @@
+load("@npm//:roots.bzl", "ROOTS")
 load("@rules_javascript//nodejs:rules.bzl", "nodejs_install", "nodejs_modules_package")
+load("@rules_javascript//typescript:npm.bzl", "ts_node_modules")
 load("@rules_javascript//typescript:rules.bzl", "js_import_ts")
-load("//tools/npm:npm.bzl", NPM_ROOTS = "ROOTS")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -11,14 +12,10 @@ nodejs_install(
 
 nodejs_modules_package(
     name = "node_modules",
-    links = [target for target in []],
-    deps = [":npm_%s" % dep["name"] for dep in NPM_ROOTS],
+    deps = [":terraform_runfiles"] + ts_node_modules("npm", ROOTS),
 )
 
-[
-    js_import_ts(
-        name = "npm_%s" % dep["name"],
-        dep = "@npm//%s:lib" % dep["name"],
-    )
-    for dep in NPM_ROOTS
-]
+js_import_ts(
+    name = "terraform_runfiles",
+    dep = "//cdktf-typescript/runfiles:lib",
+)

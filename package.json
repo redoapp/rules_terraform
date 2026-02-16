@@ -2,11 +2,14 @@
   "devDependencies": {
     "@cdktf/commons": "~0.20",
     "@cdktf/provider-generator": "~0.20",
+    "@cdktf/provider-random": "^12",
     "@types/argparse": "^2",
     "@types/node": "^18",
     "argparse": "^2",
-    "cdktf-cli": "~0.20",
+    "cdktf": "^0.21",
+    "cdktf-cli": "^0.21",
     "codemaker": "1.98.0",
+    "constructs": "^10",
     "prettier-plugin-organize-imports": "^3"
   }
 }

@@ -1,14 +1,18 @@
 module(name = "rules_terraform")
 
+# Bazel Lib
+
+bazel_dep(name = "bazel_lib", version = "3.2.0")
+
 # Bazel Util
 
 bazel_dep(name = "bazel_util")
 
-BAZEL_UTIL_VERSION = "7691525d0f7da7ae27ceb47ab7bf061251363fe4"
+BAZEL_UTIL_VERSION = "080694bcfa6d75771e6b72e4bcb66edd9e40fbfe"
 
 archive_override(
     module_name = "bazel_util",
-    sha256 = "d28ec8c5dfd84e55f58f6309f8ac5583ff8a5976bdd1fc6b20d88878e344e57f",
+    sha256 = "5e6ad7a1a0c4a9160139cdd639162924e285ba6b125291bbd4805c07f31d32b7",
     strip_prefix = "bazel-util-%s" % BAZEL_UTIL_VERSION,
     url = "https://github.com/redoapp/bazel-util/archive/%s.tar.gz" % BAZEL_UTIL_VERSION,
 )
@@ -21,16 +25,24 @@ include("//tools/file:file.MODULE.bazel")
 
 bazel_dep(name = "rules_javascript")
 
-RULES_JAVASCRIPT_VERSION = "dc853d3b5ca1bcfab6e51573e1beb8587676323c"
+RULES_JAVASCRIPT_VERSION = "34b371416d1468c3a77e66b2c4e9176dcb642b1f"
 
 archive_override(
     module_name = "rules_javascript",
-    sha256 = "42147b63025b43c2cbb474b00e0cc8ebbd16600638f88a7416ea4828c972350e",
+    sha256 = "ad1942a1b47ba27ff04438aaa8f9feaeb539907efbfdb7484f473cc86f361f0c",
     strip_prefix = "rules_javascript-%s" % RULES_JAVASCRIPT_VERSION,
     url = "https://github.com/redoapp/rules_javascript/archive/%s.tar.gz" % RULES_JAVASCRIPT_VERSION,
 )
 
 include("//tools/javascript:javascript.MODULE.bazel")
+include("//tools/nodejs:nodejs.MODULE.bazel")
+
+# Go
+
+bazel_dep(name = "rules_go", version = "0.53.0")
+bazel_dep(name = "gazelle", version = "0.47.0")
+
+include("//tools/go:go.MODULE.bazel")
 
 # Platforms
 

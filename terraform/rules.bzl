@@ -122,6 +122,7 @@ tf_format = rule(
 
 def _tf_project_impl(ctx):
     actions = ctx.actions
+    bash_runfiles_default = ctx.attr._bash_runfiles[DefaultInfo]
     config = ctx.file.config or (ctx.file._config_default if ctx.attr.config_default else None)
     data = ctx.files.data
     data_default = [target[DefaultInfo] for target in ctx.attr.data]
@@ -191,6 +192,7 @@ def _tf_project_impl(ctx):
         root_symlinks["%s/plugins/%s" % (path, provider_path)] = provider.file
 
     runfiles = ctx.runfiles(files = [terraform.bin] + ([config] if config else []) + data, root_symlinks = root_symlinks)
+    runfiles = runfiles.merge(bash_runfiles_default.default_runfiles)
     runfiles = runfiles.merge_all([default_info.default_runfiles for default_info in data_default])
     default_info = DefaultInfo(
         executable = executable,
@@ -212,6 +214,9 @@ tf_project = rule(
         "terraform": attr.label(
             default = ":terraform",
             providers = [TerraformInfo],
+        ),
+        "_bash_runfiles": attr.label(
+            default = "@bazel_tools//tools/bash/runfiles",
         ),
         "_config_default": attr.label(
             allow_single_file = True,

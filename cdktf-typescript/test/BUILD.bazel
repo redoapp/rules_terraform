@@ -1,0 +1,56 @@
+load("@rules_javascript//commonjs:rules.bzl", "cjs_root")
+load("@rules_javascript//javascript:rules.bzl", "js_library")
+load("@rules_javascript//nodejs:rules.bzl", "nodejs_binary")
+load("@rules_javascript//typescript:rules.bzl", "ts_library")
+load("//cdktf:rules.bzl", "cdktf_project", "tf_import_cdktf")
+
+nodejs_binary(
+    name = "bin",
+    dep = ":lib",
+    main = "lib/main.js",
+)
+
+cdktf_project(
+    name = "cdktf",
+    bin = ":bin",
+    config = "cdktf.json",
+)
+
+ts_library(
+    name = "lib",
+    srcs = glob(["src/**/*.ts"]),
+    config = "tsconfig.json",
+    config_dep = ":tsconfig",
+    declaration_prefix = "lib",
+    js_prefix = "lib",
+    root = ":root",
+    strip_prefix = "src",
+    deps = [
+        "//cdktf-typescript/runfiles:lib",
+        "@npm//@cdktf/provider-random:lib",
+        "@npm//cdktf:lib",
+    ],
+)
+
+cjs_root(
+    name = "root",
+    package_name = "@rules-terraform/cdktf-test",
+    descriptors = ["package.json"],
+)
+
+tf_import_cdktf(
+    name = "tf",
+    data = ["data.txt"],
+    providers = [
+        "@terraform_provider_random//:provider",
+        "//terraform/runfiles:provider",
+    ],
+    stack = "Main",
+    synth = ":cdktf.synth",
+)
+
+js_library(
+    name = "tsconfig",
+    srcs = ["tsconfig.json"],
+    root = ":root",
+)

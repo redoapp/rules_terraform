@@ -2,6 +2,9 @@ load("//terraform:rules.bzl", "tf_project")
 
 tf_project(
     name = "tf",
-    data = glob(["*.tf"]),
-    providers = ["@terraform_provider_random//:provider"],
+    data = ["data.txt"] + glob(["*.tf"]),
+    providers = [
+        "@terraform_provider_random//:provider",
+        "//terraform/runfiles:provider",
+    ],
 )

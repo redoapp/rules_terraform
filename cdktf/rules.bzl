@@ -7,6 +7,7 @@ load("//terraform:terraform.bzl", "TerraformInfo")
 
 def _cdktf_bin_impl(ctx):
     actions = ctx.actions
+    bash_runfiles_default = ctx.attr._bash_runfiles[DefaultInfo]
     bin = ctx.executable.bin
     bin_default = ctx.attr.bin[DefaultInfo]
     cdktf = ctx.executable.cdktf
@@ -41,6 +42,7 @@ def _cdktf_bin_impl(ctx):
         "_path/terraform": terraform.bin,
     }
     runfiles = ctx.runfiles(root_symlinks = root_symlinks)
+    runfiles = runfiles.merge(bash_runfiles_default.default_runfiles)
     runfiles = runfiles.merge(bin_default.default_runfiles)
     runfiles = runfiles.merge(cdktf_default.default_runfiles)
     default_info = DefaultInfo(
@@ -73,6 +75,9 @@ cdktf_bin = rule(
             default = "//terraform",
             providers = [TerraformInfo],
         ),
+        "_bash_runfiles": attr.label(
+            default = "@bazel_tools//tools/bash/runfiles",
+        ),
         "_fake_node": attr.label(
             cfg = "target",
             default = ":fake_node",
@@ -97,6 +102,8 @@ def _cdktf_bindings_impl(ctx):
     tf_config = ctx.file._tf_config
     tf_template = ctx.file._tf_template
     provider = ctx.attr.provider[TerraformProviderInfo]
+    providers_schema = ctx.executable._providers_schema
+    providers_schema_default = ctx.attr._providers_schema[DefaultInfo]
     name = ctx.attr.name
 
     dummy = actions.declare_file("%s.dummy" % name.replace("/", "_"))
@@ -107,7 +114,7 @@ def _cdktf_bindings_impl(ctx):
         output = tf,
         substitutions = {
             "%{name}": json.encode(provider.type),
-            "%{source}": json.encode("%s/%s" % (provider.namespace, provider.type)),
+            "%{source}": json.encode("%s/%s/%s" % (provider.hostname, provider.namespace, provider.type)),
         },
         template = tf_template,
     )
@@ -140,21 +147,22 @@ def _cdktf_bindings_impl(ctx):
     args.add(terraform.bin)
     args.add("%s/%s.tf" % (paths.dirname(dummy.path), name))
     args.add(schema)
-    actions.run_shell(
+    actions.run(
         arguments = [args],
         env = {
             "TF_CLI_CONFIG_FILE": tf_config.path,
         },
-        command = '"$1" -chdir="$2" providers schema -json > "$3"',
+        executable = providers_schema,
         inputs = [lockfile, provider_file, terraform.bin, tf, tf_config],
         outputs = [schema],
+        tools = [providers_schema_default.files_to_run],
     )
 
     args = actions.args()
     out = actions.declare_directory(name)
     args = actions.args()
     args.add("provider")
-    args.add("--source", "%s/%s" % (provider.namespace, provider.type))
+    args.add("--source", "%s/%s/%s" % (provider.hostname, provider.namespace, provider.type))
     args.add(schema)
     args.add(out.path)
     actions.run(
@@ -192,6 +200,11 @@ cdktf_bindings = rule(
         "_lock": attr.label(
             cfg = "exec",
             default = "//terraform/lock:bin",
+            executable = True,
+        ),
+        "_providers_schema": attr.label(
+            cfg = "exec",
+            default = ":providers_schema",
             executable = True,
         ),
         "_tf_config": attr.label(

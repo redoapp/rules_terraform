@@ -3,4 +3,5 @@ load("@bazel_util//file:rules.bzl", "bazelrc_deleted_packages")
 alias(
     name = "refresh",
     actual = "@files//packages:bazelrc",
+    visibility = ["//:__subpackages__"],
 )

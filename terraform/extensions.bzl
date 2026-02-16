@@ -30,10 +30,10 @@ def _terraform_impl(ctx):
                     print("Warning: replacing Terraform version %s with %s" % (version, toolchain.version))
                 version = toolchain.version
 
-    version = version or "1.6.6"
+    version = version or "1.14.5"
 
     sha256s = facts and facts.get("sha256s")
-    if sha256s == None:
+    if sha256s == None or facts.get("version") != version:
         ctx.download(
             output = "SHA256SUMS",
             url = "https://releases.hashicorp.com/terraform/{version}/terraform_{version}_SHA256SUMS".format(version = version),
@@ -91,7 +91,7 @@ def _terraform_impl(ctx):
     )
 
     return ctx.extension_metadata(
-        facts = {_FACTS_KEY: {"providers": providers, "sha256s": sha256s, "_version": _FACTS_VERSION}},
+        facts = {_FACTS_KEY: {"providers": providers, "sha256s": sha256s, "version": version, "_version": _FACTS_VERSION}},
         reproducible = True,
     )
 

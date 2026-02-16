@@ -1,0 +1,4 @@
+nodejs = use_extension("@rules_javascript//nodejs:extensions.bzl", "nodejs", dev_dependency = True)
+nodejs.toolchain(
+    version = "22.17.1",
+)

@@ -1,3 +1,5 @@
+load("@rules_shell_extra//shell:rules.bzl", sh_binary_ = "sh_binary")
+
 exports_files(
     [
         "project-runner.sh.tpl",
@@ -14,6 +16,12 @@ alias(
 
 sh_binary(
     name = "fake_node",
-    srcs = ["fake-node.sh"],
+    srcs = ["fake-node"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary_(
+    name = "providers_schema",
+    main = "providers-schema.sh",
     visibility = ["//visibility:public"],
 )

@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "sideEffects": false,
+  "typesVersions": {
+    "*": {
+      "lib/*": [
+        "types/*"
+      ]
+    }
+  }
+}

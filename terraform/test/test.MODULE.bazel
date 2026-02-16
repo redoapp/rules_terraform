@@ -2,7 +2,7 @@ terraform = use_extension("//terraform:extensions.bzl", "terraform", dev_depende
 terraform.provider(
     name = "terraform_provider_random",
     address = "registry.terraform.io/hashicorp/random",
-    version = "3.5.1",
+    version = "3.7.2",
 )
 use_repo(
     terraform,
