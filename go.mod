@@ -5,7 +5,7 @@ go 1.22.0
 toolchain go1.22.7
 
 require (
-	github.com/bazelbuild/rules_go v0.53.0
+	github.com/bazelbuild/rules_go v0.60.0
 	github.com/hashicorp/terraform-plugin-framework v1.14.0
 )
 

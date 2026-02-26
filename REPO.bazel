@@ -1,0 +1,5 @@
+# Keep in sync with tools/file/files.bazel ignore_directories
+ignore_directories([
+    "**/.git",
+    "**/node_modules",
+])

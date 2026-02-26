@@ -8,11 +8,11 @@ bazel_dep(name = "bazel_lib", version = "3.2.0")
 
 bazel_dep(name = "bazel_util")
 
-BAZEL_UTIL_VERSION = "080694bcfa6d75771e6b72e4bcb66edd9e40fbfe"
+BAZEL_UTIL_VERSION = "a2f0d02bc6f130eb887ad4cf18499bdbfd39f34d"
 
 archive_override(
     module_name = "bazel_util",
-    sha256 = "5e6ad7a1a0c4a9160139cdd639162924e285ba6b125291bbd4805c07f31d32b7",
+    sha256 = "8e7cbc3f3119109603c17ee686973a0bbe99770aa57f1d2b33324583d784c38f",
     strip_prefix = "bazel-util-%s" % BAZEL_UTIL_VERSION,
     url = "https://github.com/redoapp/bazel-util/archive/%s.tar.gz" % BAZEL_UTIL_VERSION,
 )
@@ -25,11 +25,11 @@ include("//tools/file:file.MODULE.bazel")
 
 bazel_dep(name = "rules_javascript")
 
-RULES_JAVASCRIPT_VERSION = "34b371416d1468c3a77e66b2c4e9176dcb642b1f"
+RULES_JAVASCRIPT_VERSION = "40bf21d51264c67b8c8c02c4ec8a31bf2f4d4138"
 
 archive_override(
     module_name = "rules_javascript",
-    sha256 = "ad1942a1b47ba27ff04438aaa8f9feaeb539907efbfdb7484f473cc86f361f0c",
+    sha256 = "3552698824e7056281287822df3e11047069dfc902b7e1a5d505ec8b00cc27a9",
     strip_prefix = "rules_javascript-%s" % RULES_JAVASCRIPT_VERSION,
     url = "https://github.com/redoapp/rules_javascript/archive/%s.tar.gz" % RULES_JAVASCRIPT_VERSION,
 )
@@ -39,7 +39,7 @@ include("//tools/nodejs:nodejs.MODULE.bazel")
 
 # Go
 
-bazel_dep(name = "rules_go", version = "0.53.0")
+bazel_dep(name = "rules_go", version = "0.60.0")
 bazel_dep(name = "gazelle", version = "0.47.0")
 
 include("//tools/go:go.MODULE.bazel")
@@ -50,10 +50,11 @@ bazel_dep(name = "platforms", version = "1.0.0")
 
 # Python
 
-bazel_dep(name = "rules_python", version = "1.4.1")
+bazel_dep(name = "rules_python", version = "1.8.5")
 
 # Shell
 
+bazel_dep(name = "rules_shell", version = "0.6.1")
 bazel_dep(name = "rules_shell_extra")
 
 RULES_SHELL_EXTRA_VERSION = "93090b47f81577ba4890c770effd889f61ce5d19"
