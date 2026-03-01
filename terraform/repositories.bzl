@@ -14,6 +14,10 @@ def _tf_http_archive_impl(ctx):
         sha256 = ctx.attr.sha256,
     )
 
+    return ctx.repo_metadata(
+        reproducible = True,
+    )
+
 tf_http_archive = repository_rule(
     attrs = {
         "arch": attr.string(mandatory = True),
@@ -50,6 +54,10 @@ def _tf_provider_impl(ctx):
         },
     )
 
+    return ctx.repo_metadata(
+        reproducible = True,
+    )
+
 tf_provider = repository_rule(
     attrs = {
         "hostname": attr.string(doc = "Canonical hostname", mandatory = True),
@@ -76,6 +84,10 @@ def _tf_provider_toolchain_impl(ctx):
     ctx.download_and_extract(
         sha256 = sha256,
         url = url,
+    )
+
+    return ctx.repo_metadata(
+        reproducible = True,
     )
 
 tf_provider_toolchain = repository_rule(
