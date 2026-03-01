@@ -1,0 +1,11 @@
+load("@bazel_util//bazelrc:rules.bzl", "bazelrc_gen")
+
+bazelrc_gen(
+    name = "bazelrc",
+    path = "preset",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@r_tools//bazel/bazelrc:preset",
+        "@rules_javascript//typescript:bazelrc",
+    ],
+)

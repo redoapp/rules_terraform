@@ -1,0 +1,6 @@
+git = use_extension("@bazel_util//git:extensions.bzl", "git", dev_dependency = True)
+git.configure(
+    name = "git",
+    root_file = "//:WORKSPACE.bazel",
+)
+use_repo(git, "git_changed_files")

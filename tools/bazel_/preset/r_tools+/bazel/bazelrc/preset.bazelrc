@@ -1,0 +1,21 @@
+# Configs
+
+## Build
+build --norun_validations
+build --trim_test_configuration
+
+# Bzlmod
+common --check_direct_dependencies error
+
+## Cache
+common --experimental_disk_cache_gc_max_size=50G
+# for backwards compatibility
+common:macos --disk_cache ~/.cache/bazel-disk
+
+# Configs
+
+## Release
+build:release --@r_tools//bazel/artifact:stamp=1
+
+## Test No Cache
+build:test_nocache --nocache_test_results

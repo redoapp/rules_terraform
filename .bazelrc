@@ -1,25 +1,19 @@
-# Startup
+import %workspace%/tools/bazel_/preset.bazelrc
+
+# General
+
+## Rules
+# Java
+common --noincompatible_no_rule_outputs_param
+
+# Server
 startup --host_jvm_args=-Xmx1024m
+
+# Rule Sets
 
 # Files
 import %workspace%/tools/file/files.bazelrc
 
-# Repos
-common --enable_workspace
+# Other
 
-# Cache
-build --disk_cache ~/.cache/bazel-disk
-clean --disk_cache ~/.cache/bazel-disk
-fetch --disk_cache ~/.cache/bazel-disk
-info --disk_cache ~/.cache/bazel-disk
-query --disk_cache ~/.cache/bazel-disk
-
-# Build
-build -k
-
-# Test
-build --nozip_undeclared_test_outputs
-build --test_output=all
-
-# User settings
 try-import %workspace%/.bazelrc.user

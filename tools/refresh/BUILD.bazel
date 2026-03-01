@@ -1,0 +1,11 @@
+load("@rules_shell_extra//shell:rules.bzl", "sh_binary")
+
+sh_binary(
+    name = "refresh",
+    data = [
+        "//tools/bazel_:bazelrc",
+        "@files//packages:bazelrc",
+    ],
+    main = "refresh.sh",
+    visibility = ["//:__subpackages__"],
+)

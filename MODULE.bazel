@@ -1,18 +1,15 @@
 module(name = "rules_terraform")
 
-# Bazel Lib
+# Bazel
 
-bazel_dep(name = "bazel_lib", version = "3.2.0")
-
-# Bazel Util
-
+bazel_dep(name = "bazel_lib", version = "3.2.1")
 bazel_dep(name = "bazel_util")
 
-BAZEL_UTIL_VERSION = "a2f0d02bc6f130eb887ad4cf18499bdbfd39f34d"
+BAZEL_UTIL_VERSION = "c0dcf8fac981f06ca86d2840761b3703da3a525a"
 
 archive_override(
     module_name = "bazel_util",
-    sha256 = "8e7cbc3f3119109603c17ee686973a0bbe99770aa57f1d2b33324583d784c38f",
+    integrity = "sha256-PoekS5Uks+78YYQpIREdHJGicuSB8umpaB25umDdVLk=",
     strip_prefix = "bazel-util-%s" % BAZEL_UTIL_VERSION,
     url = "https://github.com/redoapp/bazel-util/archive/%s.tar.gz" % BAZEL_UTIL_VERSION,
 )
@@ -21,15 +18,19 @@ archive_override(
 
 include("//tools/file:file.MODULE.bazel")
 
+# Git
+
+include("//tools/git:git.MODULE.bazel")
+
 # JavaScript
 
 bazel_dep(name = "rules_javascript")
 
-RULES_JAVASCRIPT_VERSION = "40bf21d51264c67b8c8c02c4ec8a31bf2f4d4138"
+RULES_JAVASCRIPT_VERSION = "ac627b6b0276d71d108ec5abc618ec4761240c56"
 
 archive_override(
     module_name = "rules_javascript",
-    sha256 = "3552698824e7056281287822df3e11047069dfc902b7e1a5d505ec8b00cc27a9",
+    integrity = "sha256-wNc4w/jMO2Zxc3Nk9W6Pd+RiKV0gv+V9Hd7JQ4fmeYA=",
     strip_prefix = "rules_javascript-%s" % RULES_JAVASCRIPT_VERSION,
     url = "https://github.com/redoapp/rules_javascript/archive/%s.tar.gz" % RULES_JAVASCRIPT_VERSION,
 )
@@ -52,6 +53,19 @@ bazel_dep(name = "platforms", version = "1.0.0")
 
 bazel_dep(name = "rules_python", version = "1.8.5")
 
+# Redo Tech
+
+bazel_dep(name = "r_tools", dev_dependency = True)
+
+R_TOOLS_VERSION = "c3c2b65db7cd6d048798c1c8c2501ce706cf4c16"
+
+archive_override(
+    module_name = "r_tools",
+    integrity = "sha256-lUQDylog5v+SVzgZDVRUY/QK0MGsKnGkEzjQ8RU8m3k=",
+    strip_prefix = "r-tools-%s" % R_TOOLS_VERSION,
+    url = "https://github.com/redoapp/r-tools/archive/%s.tar.gz" % R_TOOLS_VERSION,
+)
+
 # Shell
 
 bazel_dep(name = "rules_shell", version = "0.6.1")
@@ -61,7 +75,7 @@ RULES_SHELL_EXTRA_VERSION = "93090b47f81577ba4890c770effd889f61ce5d19"
 
 archive_override(
     module_name = "rules_shell_extra",
-    sha256 = "c69a83b7afefa03b21c370c2044c63c41800820f51680022604133a098e2c932",
+    integrity = "sha256-xpqDt6/voDshw3DCBExjxBgAgg9RaAAiYEEzoJjiyTI=",
     strip_prefix = "rules_shell_extra-%s" % RULES_SHELL_EXTRA_VERSION,
     url = "https://github.com/redoapp/rules_shell_extra/archive/%s.tar.gz" % RULES_SHELL_EXTRA_VERSION,
 )

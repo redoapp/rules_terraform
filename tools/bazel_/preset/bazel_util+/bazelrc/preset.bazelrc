@@ -1,0 +1,92 @@
+# General
+
+startup --windows_enable_symlinks
+
+## Build
+build -k
+build --guard_against_concurrent_changes
+build --incompatible_auto_exec_groups
+build --incompatible_strip_executable_safely
+
+## Cache
+build --noexperimental_check_output_files
+common --experimental_repository_cache_hardlinks
+common --noexperimental_check_external_repository_files
+common:linux --disk_cache ~/.cache/bazel-disk
+common:macos --disk_cache ~/Library/Caches/bazel-disk
+
+## Config
+common --enable_platform_specific_config
+
+## Coverage
+build --experimental_fetch_all_coverage_outputs
+
+## Profile
+build --nogenerate_json_trace_profile
+
+## Rules
+build --incompatible_check_testonly_for_output_files
+build --incompatible_config_setting_private_default_visibility
+build --incompatible_no_implicit_file_export
+common --incompatible_disable_starlark_host_transitions
+common --incompatible_disable_target_default_provider_fields
+common --incompatible_disallow_ctx_resolve_tools
+common --incompatible_no_rule_outputs_param
+common --incompatible_remote_local_fallback_for_remote_cache
+common --incompatible_resolve_select_keys_eagerly
+common --incompatible_stop_exporting_build_file_path
+common --incompatible_stop_exporting_language_modules
+
+## Run
+run --run_in_cwd
+
+## Runfiles
+build --build_runfile_links
+build --enable_runfiles
+build --incompatible_compact_repo_mapping_manifest
+
+## Sandbox
+build --reuse_sandbox_directories
+build --nosandbox_default_allow_network
+
+## Starlark
+common --incompatible_enforce_starlark_utf8=error
+
+## Test
+test --build_tests_only
+build --incompatible_exclusive_test_sandboxed
+build --test_output=errors
+
+# Rule sets
+
+## C++
+common --incompatible_use_cc_configure_from_rules_cc
+
+## Java
+common --incompatible_disable_non_executable_java_binary
+
+## Python
+build --noexperimental_python_import_all_repositories
+build --incompatible_default_to_explicit_init_py
+
+# Configs
+
+## CI
+build:ci --generate_json_trace_profile
+build:ci --nobuild_runfile_links
+build:ci --remote_download_minimal
+common:ci --lockfile_mode=error
+test:ci --remote_download_regex=.*/test.xml
+common:ci --show_progress_rate_limit=15
+build:ci --test_env=CI=1
+
+## Quiet
+common:quiet --noshow_loading_progress
+common:quiet --noshow_progress
+common:quiet --ui_event_filters=-info
+
+## Test debug
+build:test_debug --test_env=TEST_DEBUG=true
+build:test_debug --test_output=streamed
+build:test_debug --test_sharding_strategy=disabled
+build:test_debug --test_timeout=9999
