@@ -1,6 +1,6 @@
+load("@bazel_lib//lib:paths.bzl", "to_rlocation_path")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
-load("@bazel_util//util:path.bzl", "runfile_path")
 load("//terraform:provider.bzl", "TerraformProviderInfo")
 load("//terraform:rules.bzl", "tf_project")
 load("//terraform:terraform.bzl", "TerraformInfo")
@@ -29,8 +29,8 @@ def _cdktf_bin_impl(ctx):
         is_executable = True,
         output = executable,
         substitutions = {
-            "%{cdktf}": shell.quote(runfile_path(workspace, cdktf)),
-            "%{bin}": shell.quote(runfile_path(workspace, bin)),
+            "%{cdktf}": shell.quote(to_rlocation_path(ctx, cdktf)),
+            "%{bin}": shell.quote(to_rlocation_path(ctx, bin)),
             "%{path}": shell.quote(path),
         },
         template = runner,

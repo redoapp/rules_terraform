@@ -3,6 +3,8 @@ import %workspace%/tools/bazel_/preset.bazelrc
 # General
 
 ## Rules
+# rules_go
+common --noincompatible_disable_target_default_provider_fields
 # Java
 common --noincompatible_no_rule_outputs_param
 

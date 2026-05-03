@@ -1,7 +1,7 @@
+load("@bazel_lib//lib:paths.bzl", "to_rlocation_path")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@bazel_util//generate:providers.bzl", "FormatterInfo")
-load("@bazel_util//util:path.bzl", "runfile_path")
 load(":provider.bzl", "TerraformProviderInfo")
 load(":terraform.bzl", "TerraformInfo")
 
@@ -177,11 +177,11 @@ def _tf_project_impl(ctx):
         is_executable = True,
         output = executable,
         substitutions = {
-            "%{config}": shell.quote(runfile_path(workspace, config)) if config else "",
+            "%{config}": shell.quote(to_rlocation_path(ctx, config)) if config else "",
             "%{data_dir}": shell.quote(data_dir),
             "%{package}": shell.quote("/".join(path.split("/")[1:])),
             "%{path}": shell.quote(path),
-            "%{terraform}": shell.quote(runfile_path(workspace, terraform.bin)),
+            "%{terraform}": shell.quote(to_rlocation_path(ctx, terraform.bin)),
         },
         template = runner,
     )

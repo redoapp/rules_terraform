@@ -1,5 +1,6 @@
 .bazel-npm-cache.json
 .terraform
+.vscode
 .yarn
 node_modules
 

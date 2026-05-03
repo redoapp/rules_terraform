@@ -1,5 +1,5 @@
+load("@bazel_lib//lib:paths.bzl", "to_rlocation_path")
 load("@bazel_skylib//lib:shell.bzl", "shell")
-load("@bazel_util//util:path.bzl", "runfile_path")
 
 def _sh_binary_impl(ctx):
     actions = ctx.actions
@@ -9,13 +9,12 @@ def _sh_binary_impl(ctx):
     main = ctx.file.main
     name = ctx.attr.name
     template = ctx.file._template
-    workspace = ctx.workspace_name
 
     executable = actions.declare_file(name)
     actions.expand_template(
         is_executable = True,
         substitutions = {
-            "%{main}": shell.quote(runfile_path(workspace, main)),
+            "%{main}": shell.quote(to_rlocation_path(ctx, main)),
         },
         template = template,
         output = executable,
